@@ -1,16 +1,50 @@
 ---
+import { actions } from "astro:actions";
+import MainLayout from "../layouts/mainLayout/MainLayout.astro";
+import Sites from "../components/sites/Sites.astro";
+export const prerender = true;
 
+const imgLogo = "../../public/assest/imgs/logo_conectado.png";
+const imgConect = "../../public/assest/imgs/conectados.png";
+const { data = [], error } = await actions.getEvent();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title="Home">
+  <section class="flex flex-col items-center p-5">
+    <h3 class="text-white xs:text-red-800">Estas cordialmente invitado a</h3>
+    <img src={imgLogo} width="200" height="200" alt="Logo" />
+  </section>
+  <section></section>
+  <section>
+    <img src={imgConect} alt="Conectados" width="100%" height="350" />
+    <p class="text-white p-8 text-center">
+      Únete a nosotros en una noche diseñada para celebrar nuestra alianza,
+      compartir experiencias y crear conexiones valiosas. Queremos que seas
+      parte de este encuentro especial, donde celebramos nuestro compromiso
+      mutuo de ofrecer el mejor servicio a las mas de 1.000 Familias que confian
+      en Previser
+    </p>
+    <div class="border-b-2 border-white w-10/12 mx-auto"></div>
+    <div>
+      <Sites siteData={data} />
+    </div>
+  </section>
+  <section>
+    <div
+      class="bg-yellow-400 w-1/4 p-1 text-center rounded-md mx-auto mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer"
+    >
+      <button class="font-bold" type="submit">¡Registrate aqui!</button>
+    </div>
+    <div class="bg-white rounded text-center mb-3">
+      <p class="text-blue-800 text-1xl">
+        Por favor,<span class="font-bold">confirma tu asistencia</span> antes del
+        23 de Noviembre
+      </p>
+    </div>
+    <p class="text-white text-center">
+      No te pierdas la oportunidad unica <span
+        >fortalecer tu presencia en el ecosistemaPreviser</span
+      >¡Te esperamos con los brazos abiertos!
+    </p>
+  </section>
+</MainLayout>

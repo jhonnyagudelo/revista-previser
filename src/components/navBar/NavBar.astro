@@ -1,0 +1,20 @@
+---
+import { ProtectedRoutes, PublicRoutes } from "../../utilities/routes";
+---
+
+<nav class="flex justify-between px-20 py-5 items-center bg-blue-800">
+  <h1 class="text-xl text-white font-bold"></h1>
+  <div class="flex items-center">
+    <div class="flex items-center"></div>
+    <ul class="flex items-center space-x-6">
+      <li class="font-semibold text-white cursor-pointer">
+        <a href={`/${ProtectedRoutes?.PRIVATE}/${ProtectedRoutes?.PROTECTED}`}
+          >Home</a
+        >
+      </li>
+      <li class="font-semibold text-white cursor-pointer">
+        <a href={`/${PublicRoutes?.PUBLIC}/${PublicRoutes?.LOGIN}`}>Ingresar</a>
+      </li>
+    </ul>
+  </div>
+</nav>

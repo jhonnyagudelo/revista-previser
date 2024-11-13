@@ -1,0 +1,50 @@
+---
+import { formatDateOrTime } from "../../utilities/formatDateOrTime";
+import type { SiteProps, Event } from "../../interfaces/site.interface";
+
+interface Props {
+  siteData: SiteProps;
+}
+
+// Desestructuramos los datos necesarios de `siteData` y aplicamos valores por defecto
+const { siteData } = Astro.props;
+const events = siteData?.data ?? []; // Evitamos errores si `data` es undefined
+---
+
+{
+  events.length > 0 ? (
+    events.map((event: Event) => (
+      <div
+        class="bg-blue-800 text-white rounded-lg p-4 mb-4 text-center"
+        aria-labelledby={`event-${event.id}`}
+      >
+        <h1 id={`event-${event.id}`} class="text-2xl text-white font-bold">
+          Te esperamos:
+        </h1>
+        <div class="flex justify-center items-center mt-2">
+          <div class="text-2xl font-bold flex justify-center items-center">
+            <span class="p-5">{formatDateOrTime(event?.date, "dddd")}</span>
+            <div class="flex flex-col items-center border-2 border-white bg-white rounded">
+              <span class="text-7xl text-blue-800">
+                {formatDateOrTime(event?.date, "D")}
+              </span>
+              <span class="text-xl font-bold text-blue-800">
+                {formatDateOrTime(event?.date, "MMMM")}
+              </span>
+            </div>
+            <span class="p-5">{formatDateOrTime(event?.hour, "hh:mm A")}</span>
+          </div>
+        </div>
+        <div class="mt-4">
+          <p>
+            <span class="text-xl font-semibold">Lugar :</span>
+            {event.place || "Lugar no especificado"}
+          </p>
+          <p>{event.location || "Ubicación no especificada"}</p>
+        </div>
+      </div>
+    ))
+  ) : (
+    <p class="text-gray-500">No hay eventos disponibles.</p>
+  )
+}
