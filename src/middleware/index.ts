@@ -2,8 +2,6 @@ import prisma from "../db";
 import { defineMiddleware } from "astro/middleware";
 import bcrypt from 'bcrypt';
 
-
-
 const protectedRoutes = ['/protected'];
 const requiredRoleId = 1; // Reemplaza con el ID del rol requerido
 
@@ -48,20 +46,20 @@ async function verifyUserAuthentication(authHeaders: string): Promise<boolean> {
     const [username, password] = decodedValue.split(':') as [string, string];
 
     // Buscar al usuario en la base de datos y obtener su rol
-    const user = await prisma.user.findUnique({
+    const user = await prisma.users.findFirst({
         where: { username },
         include: {
             role: true,
         },
     });
 
-    if (!user || !user.role) {
+    if (!user || !user.role_id) {
         return false; // Usuario no encontrado o sin rol asignado
     }
 
     // Validar contraseña y rol
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    const hasRequiredRole = user.role.id === requiredRoleId;
+    const hasRequiredRole = user.role_id === requiredRoleId;
 
     return isPasswordValid && hasRequiredRole;
 }

@@ -10,12 +10,16 @@ export const arrivalConfirmation = defineAction({
     }),
     handler: async ({ clienteId, eventoId }) => {
         try {
-            const attendace = await prisma.attendace.updateMany({
-                where: { clienteId, eventoId },
+            const attendance = await prisma.attendace.update({
+                where: {
+                    customer_id_event_id: {
+                        customer_id: clienteId,
+                        event_id: eventoId,
+                    }},
                 data: { confirm_arrival: true, arrival_time: new Date() },
             });
 
-            if (attendace.count === 0) {
+            if (!attendance) {
                 return { status: 404, message: "Asistencia no encontrada" };
             }
 

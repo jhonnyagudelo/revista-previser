@@ -1,0 +1,73 @@
+---
+import MainLayout from "../../layouts/mainLayout/MainLayout.astro";
+---
+
+<MainLayout title="Confirmation">
+  <h3 class="text-white text-2xl">Confirma tu asistencia:</h3>
+  <form id="attendance-form" action="#" method="POST">
+    <div class="space-y-2">
+      <input
+        class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+        placeholder="N.documento"
+        name="document"
+        required
+      />
+    </div>
+    <div
+      class="bg-yellow-400 sm:w-1/4 p-1 w-60 text-center rounded-md mx-auto mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer mt-3"
+    >
+      <button class="font-bold" id="btn-confirm" type="submit">
+        ¡Confirma!
+      </button>
+    </div>
+  </form>
+</MainLayout>
+<script>
+  import { actions } from "astro:actions";
+  import Swal from "sweetalert2";
+
+  const form = document.querySelector("#attendance-form") as HTMLFormElement;
+  const btnConfirm = document.querySelector("#btn-confirm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btnConfirm?.setAttribute("disabled", "disabled");
+
+    // Crear FormData a partir del formulario
+    const formData = new FormData(form);
+    formData.append("eventId", "1"); // Agrega eventId manualmente
+
+    try {
+      const { data, error } = await actions.confirmAttendance(formData);
+
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "ocurrio un error inesperado",
+          text: error.message,
+        });
+        btnConfirm?.removeAttribute("disabled");
+        return;
+      }
+
+      // Manejar registro exitoso
+      if (data) {
+        Swal.fire({
+          icon: "success",
+          title: "¡Registro exitoso!",
+          text: "Tu asistencia ha sido confirmada.",
+        }).then(() => {
+          window.location.replace(`/`);
+        });
+      }
+    } catch (error) {
+      console.error("Error al confirmar la asistencia:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al confirmar la asistencia",
+        text: "Ocurrió un error inesperado.",
+      });
+      btnConfirm?.removeAttribute("disabled");
+    }
+  });
+</script>

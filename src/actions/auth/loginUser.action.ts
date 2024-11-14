@@ -42,12 +42,12 @@ export const loginUser = defineAction({
         // Define la fecha de expiración de la cookie
         const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hora en milisegundos
         
-        cookies.set('auth_token', token, {
-            httpOnly: true,
-            secure: import.meta.env.MODE === 'production',
-            path: '/',           // Asegúrate de incluir 'path' si es necesario
-            expires,             // Usa expires en lugar de maxAge
-        });
+        //  cookies.set('auth_token', token, {
+  //          httpOnly: true,
+    //        secure: import.meta.env.MODE === 'production',
+      //      path: '/',           // Asegúrate de incluir 'path' si es necesario
+        //    expires,             // Usa expires en lugar de maxAge
+        //});
 
           return {
               status: 200,

@@ -6,7 +6,7 @@ export const getEvent = defineAction({
     handler: async () => {
       try {
         const event = await prisma.event.findMany()
-        return { status: 200, data: event };
+        return  event ;
       } catch (error) {
         console.error(error)
         throw 'Error'

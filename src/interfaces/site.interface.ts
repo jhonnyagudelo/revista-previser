@@ -1,15 +1,17 @@
-interface SiteProps {
-    data: Event[];
+export interface SiteProps {
+    data?: {
+      data:Event[];
+    } 
   }
   
-  interface Event {
-    id: number;
-    event_name: string;
-    date: string;
-    location: string;
-    place:string,
-    hour:string,
-    created_at: string;
-    update_at: string;
-    state: boolean;
+export interface Event {
+  id: number;
+  event_name: string;
+  date: Date;
+  location: string | null;
+  place: string | null;
+  hour: Date | null;
+  created_at: Date | null;
+  update_at: Date | null;
+  state: boolean;
   }

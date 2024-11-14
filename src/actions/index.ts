@@ -1,4 +1,4 @@
-import { arrivalConfirmation, confirmAttendace } from "./attendance";
+import { arrivalConfirmation, confirmAttendance } from "./attendance";
 import { loginUser, logout, registerUser } from "./auth";
 import { getCustomer } from "./customer";
 import { createEvent, getEvent } from "./event";
@@ -13,6 +13,6 @@ export const server ={
     createEvent,
     getEvent,
     arrivalConfirmation,
-    confirmAttendace
+    confirmAttendance
 
 }

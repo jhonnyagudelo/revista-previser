@@ -1,9 +1,10 @@
 ---
 import AuthLayout from "../../layouts/authLayout/AuthLayout.astro";
+import { ProtectedRoutes, PublicRoutes } from "../../utilities/routes";
 ---
 
 <!-- This is an example component -->
-<AuthLayout>
+<AuthLayout title="Login">
   <div class="flex justify-center self-center z-10">
     <div class="p-12 bg-white mx-auto rounded-2xl w-100">
       <div class="mb-4">
@@ -31,6 +32,14 @@ import AuthLayout from "../../layouts/authLayout/AuthLayout.astro";
             name="password"
             placeholder="Ingresar password"
           />
+        </div>
+        <div class="text-sm">
+          <a
+            href={`/${PublicRoutes?.PUBLIC}/${PublicRoutes?.REGISTER}`}
+            class="text-blue-800 hover:text-blue-500"
+          >
+            ¿No tienes cuenta?
+          </a>
         </div>
         <div>
           <button
