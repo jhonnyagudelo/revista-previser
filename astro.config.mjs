@@ -7,11 +7,9 @@ import node from '@astrojs/node';
 
 import react from '@astrojs/react';
 
-import auth from 'auth-astro';
-
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), react(), auth()],
+  integrations: [tailwind(), react()],
   output: 'hybrid',
 
   adapter: node({

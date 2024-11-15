@@ -1,15 +1,14 @@
 ---
-import { formatDateOrTime } from "../../utilities/formatDateOrTime";
-import type { Event } from "../../interfaces/site.interface";
+import { formatDateOrTime } from "@/utilities/formatDateOrTime";
+import type { event } from "@prisma/client";
 
 interface Props {
-  siteData: Event;
+  event: event;
 }
 
 // Desestructuramos los datos necesarios de `siteData` y aplicamos valores por defecto
-const { siteData } = Astro.props;
-const event = siteData ?? []; // Evitamos errores si `data` es undefined
-console.log(event);
+// biome-ignore lint/suspicious/noRedeclare: <explanation>
+const { event } = Astro.props;
 ---
 
 <div
@@ -34,7 +33,7 @@ console.log(event);
           {formatDateOrTime(event?.date, "MMMM").toLocaleUpperCase()}
         </span>
       </div>
-      <span class="p-2">{formatDateOrTime(event?.hour, "hh:mm A")}</span>
+      <span class="p-2">{"6:00 PM"}</span>
     </div>
   </div>
   <div class="mt-4">

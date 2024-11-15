@@ -5,23 +5,11 @@ import Sites from "../components/sites/Sites.astro";
 import { PublicRoutes } from "../utilities/routes";
 export const prerender = false;
 
-interface Event {
-  id: number;
-  event_name: string;
-  date: Date;
-  location: string | null;
-  place: string | null;
-  hour: Date | null;
-  created_at: Date | null;
-  update_at: Date | null;
-  state: boolean;
-}
-
 const imgLogo = "../../public/assest/imgs/logo_conectado.png";
 const imgConect = "../../public/assest/imgs/conectados.png";
 
 const { data = [], error } = await actions.getEvent();
-const events: Event = data;
+const events = data;
 ---
 
 <MainLayout title="Home">
@@ -41,7 +29,7 @@ const events: Event = data;
     </p>
     <div class="border-b-2 border-white w-10/12 mx-auto"></div>
     <div>
-      {events?.map((event: Event) => <Sites siteData={event} />)}
+      {events?.map((event ) => <Sites event={event} />)}
     </div>
   </section>
   <section>
