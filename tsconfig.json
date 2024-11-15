@@ -4,9 +4,10 @@
     "lib": ["esnext"],
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"]
+		}
 
   }
 }
