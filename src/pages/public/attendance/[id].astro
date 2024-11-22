@@ -1,0 +1,115 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
+import Sites from "@/components/sites/Sites.astro";
+import { AttendanceForm } from "@/components/attendanceForm";
+
+const imgLogo = "../../../../public/assest/imgs/logo_conectado.png";
+const imgConect = "../../../../public/assest/imgs/conectados.png";
+
+const respEvent = await fetch("http://localhost:4321/api/event");
+if (!respEvent.ok) {
+  console.error("Error en la respuesta de la API:", respEvent.statusText);
+  return [];
+}
+
+const events = await respEvent.json();
+
+export const getStaticPaths = (async () => {
+  try {
+    // Cambia `http://localhost:3000` por una variable de entorno en producción
+    const resp = await fetch("http://localhost:4321/api/customer");
+
+    if (!resp.ok) {
+      console.error("Error en la respuesta de la API:", resp.statusText);
+      return [];
+    }
+
+    const guests = await resp.json();
+
+    // Verifica que los datos sean válidos
+    if (!Array.isArray(guests)) {
+      console.error("Datos inválidos recibidos de la API");
+      return [];
+    }
+
+    // Mapea los datos para generar rutas dinámicas
+    return guests.map((guest) => ({
+      params: { id: guest.document.toString() },
+      props: { guest },
+    }));
+  } catch (error) {
+    console.error("Error en getStaticPaths:", error);
+    return [];
+  }
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { guest } = Astro.props;
+---
+
+<MainLayout title="Home">
+  <section class="flex flex-col items-center">
+    <h3 class="sm:text-3xl text-xl text-white">
+      Estás cordialmente invitado a
+    </h3>
+    <img class="m-3" src={imgLogo} width="250" height="250" alt="Logo" />
+  </section>
+  <section></section>
+  <section>
+    <img
+      class="items-center flex sm:w-fit p-3"
+      src={imgConect}
+      alt="Conectados"
+    />
+    <p class="sm:text-xl text-2xl text-white p-8 text-center">
+      Únete a nosotros en una noche diseñada para celebrar nuestra alianza,
+      compartir experiencias y crear conexiones valiosas. Queremos que seas
+      parte de este encuentro especial, donde celebramos nuestro compromiso
+      mutuo de ofrecer el mejor servicio a las más de 1.000 familias que confían
+      en Previser.
+    </p>
+    <div class="border-b-2 border-white w-10/12 mx-auto"></div>
+    <div>
+      <h1 class="text-3xl p-5 text-white text-center m-0">
+        {guest?.name.toUpperCase()}
+        {guest?.surname.toUpperCase()}
+      </h1>
+      {
+        events?.map(
+          (event: {
+            id: number;
+            event_name: string;
+            date: Date;
+            location: string | null;
+            created_at: Date | null;
+            update_at: Date | null;
+            state: boolean | null;
+            place: string | null;
+            hour: Date | null;
+          }) => <Sites event={event} />
+        )
+      }
+    </div>
+  </section>
+  <section class="pb-8 mb-14">
+    <div class="text-center">
+      <!-- Aquí puedes incluir el formulario u otros componentes -->
+      <AttendanceForm server:defer id={id} client:only="react" />
+    </div>
+    <div class="bg-white rounded text-center mb-3">
+      <p class="text-blue-800 text-xl">
+        Por favor, <span class="font-bold">confirma tu asistencia</span>
+      </p>
+      <p class="text-blue-800 text-xl">
+        <span> antes del 23 de Noviembre </span>
+      </p>
+    </div>
+    <p class="text-white text-center text-xl">
+      No te pierdas la oportunidad única de <span
+        >fortalecer tu presencia en el ecosistema Previser</span
+      >
+      <span> ¡Te esperamos con los brazos abiertos! </span>
+    </p>
+  </section>
+</MainLayout>

@@ -1,0 +1,63 @@
+---
+import { actions } from "astro:actions";
+import { ArrivalForm } from "@/components/arrivalForm";
+import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
+import type { GetStaticPaths } from "astro";
+const imgUrl = "../../../../public/assest/imgs/conectados_.png";
+
+export const getStaticPaths = (async () => {
+  try {
+    // Cambia `http://localhost:3000` por una variable de entorno en producción
+    const resp = await fetch("http://localhost:4321/api/customer");
+
+    if (!resp.ok) {
+      console.error("Error en la respuesta de la API:", resp.statusText);
+      return [];
+    }
+
+    const guests = await resp.json();
+
+    // Verifica que los datos sean válidos
+    if (!Array.isArray(guests)) {
+      console.error("Datos inválidos recibidos de la API");
+      return [];
+    }
+
+    // Mapea los datos para generar rutas dinámicas
+    return guests.map((guest) => ({
+      params: { id: guest.document.toString() },
+      props: { guest },
+    }));
+  } catch (error) {
+    console.error("Error en getStaticPaths:", error);
+    return [];
+  }
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { guests } = Astro.props;
+---
+
+<MainLayout title="Confirmar asistencia">
+  <section>
+    <img class="sm:h-5/6 sm:w-[28em]" src={imgUrl} alt="imagen" width="400" />
+    <div class="z-10 text-center p-10 center flex flex-col items-center">
+      <h1 class="sm:text-6xl p-3 text-white font-bold">Bienvenido:</h1>
+      <h2 class="sm:text-5xl p-3 text-white font-bold">
+        {guests?.name?.toUpperCase()}
+        {guests?.surname?.toUpperCase()}
+      </h2>
+      <ArrivalForm server:defer id={guests?.id} client:only="react" />
+    </div>
+  </section>
+</MainLayout>
+<style>
+  .center {
+    transform: translate(10px, -44em);
+  }
+  @media (min-width: 768px) {
+    .qr {
+      transform: translate(10px, 10px);
+    }
+  }
+</style>

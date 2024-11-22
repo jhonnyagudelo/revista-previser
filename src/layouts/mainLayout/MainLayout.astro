@@ -1,0 +1,30 @@
+---
+import HeadBase from "@/components/headBase/HeadBase.astro";
+import Header from "@/components/header/Header.astro";
+import { siteInfo } from "@/consts";
+
+interface Props {
+  title: string;
+  image?: string;
+  description?: string;
+}
+
+const {
+  title = siteInfo?.title,
+  description = siteInfo?.description,
+  image,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <HeadBase title={title} description={description} />
+  </head>
+  <body class="bg-blue-800">
+    <Header />
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+---
+import { formatDateOrTime } from "@/utilities/formatDateOrTime";
+import type { event } from "@prisma/client";
+
+interface Props {
+  event: event;
+}
+
+// Desestructuramos los datos necesarios de `siteData` y aplicamos valores por defecto
+// biome-ignore lint/suspicious/noRedeclare: <explanation>
+const { event } = Astro.props;
+---
+
+<div
+  class="bg-blue-800 text-white rounded-lg p-4 mb-4 text-center"
+  aria-labelledby={`event-${event.id}`}
+>
+  <h1 id={`event-${event.id}`} class="text-2xl text-white font-bold">
+    Te esperamos:
+  </h1>
+  <div class="flex justify-center items-center mt-2">
+    <div class="text-xl font-bold flex justify-center items-center sm:text-xs">
+      <span class="p-2 text-xl">
+        {formatDateOrTime(event?.date, "dddd").toLocaleUpperCase()}
+      </span>
+      <div
+        class="flex flex-col items-center border-2 border-white bg-white rounded"
+      >
+        <span class="text-7xl text-blue-800">
+          {formatDateOrTime(event?.date, "D")}
+        </span>
+        <span class="text-xl font-bold text-blue-800">
+          {formatDateOrTime(event?.date, "MMMM").toLocaleUpperCase()}
+        </span>
+      </div>
+      <span class="p-2 text-2xl">{"6:00 PM"}</span>
+    </div>
+  </div>
+  <div class="mt-4">
+    <p class="text-xl">
+      <span class="text-2xl font-semibold">Lugar :</span>
+      {event.place || "Lugar no especificado"}
+    </p>
+    <p class="text-xl">{event.location || "Ubicación no especificada"}</p>
+  </div>
+</div>
