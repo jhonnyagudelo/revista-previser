@@ -3,31 +3,20 @@ import type { GetStaticPaths } from "astro";
 import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
 import Sites from "@/components/sites/Sites.astro";
 import { AttendanceForm } from "@/components/attendanceForm";
+import { fetchApi } from "@/utilities";
 
 const imgLogo = "../../../../public/assest/imgs/logo_conectado.png";
 const imgConect = "../../../../public/assest/imgs/conectados.png";
 
-const respEvent = await fetch("http://localhost:4321/api/event");
-if (!respEvent.ok) {
-  console.error("Error en la respuesta de la API:", respEvent.statusText);
-  return [];
-}
+const endpoint = "/event"; // Assuming this is a string
 
-const events = await respEvent.json();
+const response = await fetchApi(endpoint);
 
 export const getStaticPaths = (async () => {
   try {
-    // Cambia `http://localhost:3000` por una variable de entorno en producción
-    const resp = await fetch("http://localhost:4321/api/customer");
+    const endpoint = "/customer"; // Assuming this is a string
+    const guests = await fetchApi(endpoint);
 
-    if (!resp.ok) {
-      console.error("Error en la respuesta de la API:", resp.statusText);
-      return [];
-    }
-
-    const guests = await resp.json();
-
-    // Verifica que los datos sean válidos
     if (!Array.isArray(guests)) {
       console.error("Datos inválidos recibidos de la API");
       return [];
@@ -76,7 +65,7 @@ const { guest } = Astro.props;
         {guest?.surname.toUpperCase()}
       </h1>
       {
-        events?.map(
+        response?.map(
           (event: {
             id: number;
             event_name: string;

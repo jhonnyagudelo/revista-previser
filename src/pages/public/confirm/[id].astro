@@ -1,0 +1,65 @@
+---
+import type { GetStaticPaths } from "astro";
+import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
+import { generateQRCode } from "@/components/qrCodeGenerate";
+import { fetchApi } from "@/utilities";
+const imgUrl = "../../../../public/assest/imgs/conectados_.png";
+// const BASE_URL = "https://revista.previser.com.co/public/asistencia";
+const BASE_URL = "http://localhost:4321/public/arrival";
+
+export const getStaticPaths = (async () => {
+  try {
+    const endpoint = "/customer"; // Assuming this is a string
+    const guests = await fetchApi(endpoint);
+
+    if (!Array.isArray(guests)) {
+      console.error("Datos inválidos recibidos de la API");
+      return [];
+    }
+
+    // Mapea los datos para generar rutas dinámicas
+    return guests.map((guest) => ({
+      params: { id: guest.document.toString() },
+      props: { guest },
+    }));
+  } catch (error) {
+    console.error("Error en getStaticPaths:", error);
+    return [];
+  }
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+const { guest } = Astro.props;
+const qrUrl = `${BASE_URL}/${guest?.id}`;
+const qrCodeUrl = await generateQRCode(qrUrl);
+---
+
+<MainLayout title="Qr">
+  <section>
+    <article class="sm:flex sm:items-center h-dvh sm:h-5/6">
+      <link rel="preload" href={qrCodeUrl} as="image" />
+      <img class="sm:h-5/6 sm:w-[28em]" src={imgUrl} alt="imagen" width="400" />
+      <div class="z-10 text-center p-10 qr flex flex-col items-center">
+        <h1 class="sm:text-5xl p-3 text-white font-bold">
+          {guest?.name.toUpperCase()}
+          {guest?.surname.toUpperCase()}
+        </h1>
+        <img
+          src={qrCodeUrl}
+          alt="Código QR generado"
+          class="sm:w-96 sm:h-96 w-60 h-60"
+        />
+      </div>
+    </article>
+  </section>
+</MainLayout>
+<style>
+  .qr {
+    transform: translate(10px, -44em);
+  }
+  @media (min-width: 768px) {
+    .qr {
+      transform: translate(10em, 10px);
+    }
+  }
+</style>

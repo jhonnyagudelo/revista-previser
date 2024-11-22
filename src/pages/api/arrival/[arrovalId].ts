@@ -6,31 +6,23 @@ export const prerender = false;
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   try {
-    // Leer y validar el cuerpo de la solicitud
-    const { eventId, document } = await request.json();
+    // Parsear el cuerpo de la solicitud
+    const { customerId, eventId } = await request.json();
 
-    if (!eventId) {
-      return jsonResponse(400, "El campo 'eventId' es requerido.");
-    }
-
-    // Validar si `document` está presente
-    if (!document) {
-      return new Response(`no se encontro el ${document}`);
-    }
-
-    const documentString = document.toString();
     const eventIdNumber = Number(eventId);
+    const customerIdNumber = Number(customerId);
 
-    if (Number.isNaN(eventIdNumber)) {
-      return jsonResponse(400, "El campo 'eventId' debe ser un número válido.");
+    // Validar los parámetros recibidos
+    if (!customerIdNumber || !eventIdNumber) {
+      return jsonResponse(404, "Parametros obligatorios.");
     }
 
     // Verificar si el cliente existe
-    const cliente = await prisma.customer.findUnique({
-      where: { document: documentString },
+    const customer = await prisma.customer.findUnique({
+      where: { id: customerIdNumber },
     });
 
-    if (!cliente) {
+    if (!customer) {
       return jsonResponse(404, "Cliente no encontrado.");
     }
 
@@ -44,10 +36,12 @@ export const PATCH: APIRoute = async ({ params, request }) => {
     }
 
     // Buscar el registro de asistencia
-    const asistenciaExistente = await prisma.attendace.findFirst({
+    const asistenciaExistente = await prisma.attendace.findUnique({
       where: {
-        customer_id: cliente.id,
-        event_id: eventIdNumber,
+        customer_id_event_id: {
+          customer_id: customer.id,
+          event_id: evento?.id,
+        },
       },
     });
 
@@ -55,9 +49,9 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       return jsonResponse(404, "Registro de asistencia no encontrado.");
     }
 
-    // Verificar si ya está confirmada
-    if (asistenciaExistente.confirm_attendance) {
-      return jsonResponse(400, "La asistencia ya está confirmada.");
+    // Validar si ya fue confirmada
+    if (asistenciaExistente.confirm_arrival) {
+      return jsonResponse(400, "Asistencia ya confirmada.");
     }
 
     // Confirmar la asistencia
@@ -65,13 +59,13 @@ export const PATCH: APIRoute = async ({ params, request }) => {
     const asistenciaActualizada = await prisma.attendace.update({
       where: {
         customer_id_event_id: {
-          customer_id: cliente.id,
-          event_id: eventIdNumber,
+          customer_id: customer.id,
+          event_id: evento?.id,
         },
       },
       data: {
-        confirm_attendance: true,
-        confirmation_time: confirmTime,
+        confirm_arrival: true,
+        arrival_time: confirmTime,
       },
     });
 
@@ -81,12 +75,11 @@ export const PATCH: APIRoute = async ({ params, request }) => {
       asistenciaActualizada
     );
   } catch (error) {
-    console.error("Error en el servidor:", error);
+    console.error("Error al confirmar la asistencia:", error);
     return jsonResponse(500, "Error interno del servidor.");
   }
 };
 
-// Función utilitaria para respuestas JSON
 function jsonResponse(
   status: number,
   message: string,

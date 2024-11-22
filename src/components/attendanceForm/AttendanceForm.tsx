@@ -1,9 +1,17 @@
-import { alertHandler } from '@/utilities/alertHandler';
-import React, { useState, type FormEvent } from 'react'
+import { fetchApi } from "@/utilities";
+import { alertHandler } from "@/utilities/alertHandler";
+import React, { useState, type FormEvent } from "react";
 
 interface AttendanceFormProps {
   id: string;
 }
+
+interface AttendanceData {
+  status: number;
+  message: string;
+  document?: string; // Propiedad opcional si existe
+}
+
 export const AttendanceForm = ({ id }: AttendanceFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -12,30 +20,24 @@ export const AttendanceForm = ({ id }: AttendanceFormProps) => {
     setLoading(true);
 
     const data = {
-      eventId: '1', // Cambia el ID según sea necesario
+      eventId: "1", // Cambia este valor según sea necesario
       document: id.toString(),
     };
 
     try {
-      // Realizar la solicitud al servidor
-      const resp = await fetch(`http://localhost:4321/api/attendance/${id}`, {
-        method: "PATCH", // Use PATCH as specified in the API route
+      const endpoint = `/attendance/${id}`;
+      const resp = await fetchApi<AttendanceData>(endpoint, {
+        method: "PATCH",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
 
-      if (!resp.ok) {
-        const errorMessage = `Error ${resp.status}: ${resp.statusText}`;
-        console.error(errorMessage);
-        await alertHandler(resp.status, "No se pudo registrar la asistencia.");
-        return;
-      }
-
-      const d = await resp.json();
-      await alertHandler(d.status, d.message,`/public/confirm/${id}`);
-      console.log("Respuesta del servidor:", d);
-
-      // ... 
+      // Llamar al manejador de alertas en caso de éxito
+      await alertHandler(
+        resp.status,
+        "Asistencia confirmada correctamente.",
+        `/public/confirm/${id}`
+      );
     } catch (error) {
       console.error("Error al confirmar la asistencia:", error);
       await alertHandler(500, "Ocurrió un error inesperado.");

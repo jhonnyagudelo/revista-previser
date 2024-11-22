@@ -1,21 +1,15 @@
 ---
-import { actions } from "astro:actions";
 import { ArrivalForm } from "@/components/arrivalForm";
 import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
+import { fetchApi } from "@/utilities";
 import type { GetStaticPaths } from "astro";
 const imgUrl = "../../../../public/assest/imgs/conectados_.png";
 
 export const getStaticPaths = (async () => {
   try {
     // Cambia `http://localhost:3000` por una variable de entorno en producción
-    const resp = await fetch("http://localhost:4321/api/customer");
-
-    if (!resp.ok) {
-      console.error("Error en la respuesta de la API:", resp.statusText);
-      return [];
-    }
-
-    const guests = await resp.json();
+    const endpoint = "/customer"; // Assuming this is a string
+    const guests = await fetchApi(endpoint);
 
     // Verifica que los datos sean válidos
     if (!Array.isArray(guests)) {
@@ -34,8 +28,7 @@ export const getStaticPaths = (async () => {
   }
 }) satisfies GetStaticPaths;
 
-const { id } = Astro.params;
-const { guests } = Astro.props;
+const { guest } = Astro.props;
 ---
 
 <MainLayout title="Confirmar asistencia">
@@ -44,10 +37,10 @@ const { guests } = Astro.props;
     <div class="z-10 text-center p-10 center flex flex-col items-center">
       <h1 class="sm:text-6xl p-3 text-white font-bold">Bienvenido:</h1>
       <h2 class="sm:text-5xl p-3 text-white font-bold">
-        {guests?.name?.toUpperCase()}
-        {guests?.surname?.toUpperCase()}
+        {guest?.name?.toUpperCase()}
+        {guest?.surname?.toUpperCase()}
       </h2>
-      <ArrivalForm server:defer id={guests?.id} client:only="react" />
+      <ArrivalForm server:defer id={guest?.id} client:only="react" />
     </div>
   </section>
 </MainLayout>

@@ -1,37 +1,46 @@
-import { alertHandler } from '@/utilities/alertHandler';
-import { actions } from 'astro:actions';
-import React, { useState, type FormEvent } from 'react'
+import { fetchApi } from "@/utilities";
+import { alertHandler } from "@/utilities/alertHandler";
+import React, { useState, type FormEvent } from "react";
 
 interface ArrivalFormProps {
   id: number;
 }
-export const ArrivalForm = ({id}:ArrivalFormProps) => {
 
-    const [loading, setLoading] = useState<boolean>(false)
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setLoading(true)
-    const formData = new FormData(e.currentTarget);
-    formData.append("eventId", "1");
-    formData.append("clientId", id.toString());
-    console.log({formData})
-    try {
-        const { data, error } =  await actions.arrivalConfirmation(formData);
-        
-        if (error) {
-            await alertHandler(500, error.message); // 500 para errores del servidor
-            return;
-        }
-        
-        // Llamar al componente AlertHandler con los datos del servidor
-        await alertHandler(data.status, data.message);
-    } catch (error) {
-        console.error("Error al confirmar la asistencia:", error);
-        await alertHandler(500, "Ocurrió un error inesperado.");
-    } finally{
-        setLoading(false)
-    }
+interface ArrivalData {
+  status: number;
+  message: string;
+  clientId: string; // Propiedad opcional si existe
 }
+export const ArrivalForm = ({ id }: ArrivalFormProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const data = {
+      eventId: 1,
+      customerId: id,
+    };
+
+    try {
+      const endpoint = `/arrival/${id}`;
+      const resp = await fetchApi<ArrivalData>(endpoint, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      });
+      console.log(resp);
+
+      // Llamar al manejador de alertas en caso de éxito
+      await alertHandler(resp.status, "Asistencia confirmada correctamente.");
+    } catch (error) {
+      console.error("Error al confirmar la asistencia:", error);
+      await alertHandler(500, "Ocurrió un error inesperado.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <form onSubmit={handleSubmit}>
       <button
@@ -42,5 +51,5 @@ export const ArrivalForm = ({id}:ArrivalFormProps) => {
         {loading ? "Procesando..." : "¡Asistencia confirmada!"}
       </button>
     </form>
-  )
-}
+  );
+};
