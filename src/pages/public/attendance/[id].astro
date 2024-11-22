@@ -4,6 +4,7 @@ import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
 import Sites from "@/components/sites/Sites.astro";
 import { AttendanceForm } from "@/components/attendanceForm";
 import { fetchApi } from "@/utilities";
+import type { event } from "@prisma/client";
 
 const imgLogo = "../../../../public/assest/imgs/logo_conectado.png";
 const imgConect = "../../../../public/assest/imgs/conectados.png";
@@ -61,22 +62,14 @@ const { guest } = Astro.props;
     <div class="border-b-2 border-white w-10/12 mx-auto"></div>
     <div>
       <h1 class="text-3xl p-5 text-white text-center m-0">
-        {guest?.name.toUpperCase()}
-        {guest?.surname.toUpperCase()}
+        {guest?.name?.toUpperCase()}
+        {guest?.surname?.toUpperCase()}
       </h1>
       {
-        response?.map(
-          (event: {
-            id: number;
-            event_name: string;
-            date: Date;
-            location: string | null;
-            created_at: Date | null;
-            update_at: Date | null;
-            state: boolean | null;
-            place: string | null;
-            hour: Date | null;
-          }) => <Sites event={event} />
+        Array.isArray(response) ? (
+          response.map((event) => <Sites event={event} />)
+        ) : (
+          <p>No events found</p>
         )
       }
     </div>

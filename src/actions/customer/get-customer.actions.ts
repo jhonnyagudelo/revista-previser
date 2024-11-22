@@ -1,4 +1,4 @@
-import { prisma } from "../../db";
+import prisma from "@/db";
 import { defineAction } from "astro:actions";
 
 export const getCustomer = defineAction({

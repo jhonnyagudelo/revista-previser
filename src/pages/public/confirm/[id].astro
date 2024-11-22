@@ -28,7 +28,6 @@ export const getStaticPaths = (async () => {
   }
 }) satisfies GetStaticPaths;
 
-const { id } = Astro.params;
 const { guest } = Astro.props;
 const qrUrl = `${BASE_URL}/${guest?.id}`;
 const qrCodeUrl = await generateQRCode(qrUrl);
