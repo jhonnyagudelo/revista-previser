@@ -1,6 +1,6 @@
 export const PublicRoutes: AstroRoute = {
   LOGIN: "Login",
-  PUBLIC: "publics",
+  PUBLIC: "public",
   REGISTER: "Register",
   CONFIRM_ATTENDACE: "ConfirmAttendance",
 };

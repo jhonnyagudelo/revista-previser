@@ -9,6 +9,7 @@ import node from '@astrojs/node';
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://revista.previser.com.co",
   integrations: [react(), tailwind()],
   output: 'hybrid',
 

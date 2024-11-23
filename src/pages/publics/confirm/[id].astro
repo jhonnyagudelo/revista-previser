@@ -3,7 +3,7 @@ import type { GetStaticPaths } from "astro";
 import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
 import { generateQRCode } from "@/components/qrCodeGenerate";
 import { API_BASE_URL, fetchApi } from "@/utilities";
-const imgUrl = "../../../../public/assest/imgs/conectados_.png";
+const imgUrl = "../../assest/imgs/conectados_.png";
 
 export const getStaticPaths = (async () => {
   try {
