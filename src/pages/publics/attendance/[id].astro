@@ -3,8 +3,9 @@ import type { GetStaticPaths } from "astro";
 import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
 import Sites from "@/components/sites/Sites.astro";
 import { AttendanceForm } from "@/components/attendanceForm";
-import { fetchApi } from "@/utilities";
+import { API_BASE_URL, fetchApi } from "@/utilities";
 import type { event } from "@prisma/client";
+import { baseUrlLocal } from "@/consts/baseLocal";
 
 const imgLogo = "../../../../public/assest/imgs/logo_conectado.png";
 const imgConect = "../../../../public/assest/imgs/conectados.png";
@@ -24,7 +25,7 @@ export const getStaticPaths = (async () => {
     }
 
     // Mapea los datos para generar rutas dinámicas
-    return guests.map((guest) => ({
+    return guests?.map((guest) => ({
       params: { id: guest.document.toString() },
       props: { guest },
     }));

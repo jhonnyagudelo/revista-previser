@@ -1,10 +1,12 @@
+import { baseUrlLocal } from "@/consts/baseLocal";
 import { API_BASE_URL } from "./getBaseApi";
+import { baseUrlApi } from "@/consts/baseApi";
 
 export const fetchApi = async <T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> => {
-  const url = `${API_BASE_URL?.baseUrl}${endpoint}`;
+  const url = `${baseUrlLocal}${endpoint}`;
   const response = await fetch(url, options);
 
   if (!response.ok) {
