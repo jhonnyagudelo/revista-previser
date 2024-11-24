@@ -11,7 +11,7 @@ import node from '@astrojs/node';
 export default defineConfig({
   site: "https://revista.previser.com.co",
   integrations: [react(), tailwind()],
-  output: 'hybrid',
+  output: 'server',
 
   adapter: node({
     mode: 'standalone'
