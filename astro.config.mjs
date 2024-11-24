@@ -11,8 +11,11 @@ import node from '@astrojs/node';
 export default defineConfig({
   site: "https://revista.previser.com.co",
   integrations: [react(), tailwind()],
-  output: 'server',
-
+  output: 'hybrid',
+  server: {
+    port: 3001, // Cambia al puerto que desees
+    host: true, // Escucha en todas las interfaces de red
+  },
   adapter: node({
     mode: 'standalone'
   })
