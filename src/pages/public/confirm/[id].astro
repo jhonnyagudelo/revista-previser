@@ -1,8 +1,9 @@
 ---
 import type { GetStaticPaths } from "astro";
 import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
-import { generateQRCode } from "@/components/qrCodeGenerate";
-import { API_BASE_URL, fetchApi } from "@/utilities";
+import { generateQRCode } from "../../../components/qrCodeGenerate";
+import { fetchApi } from "../../../utilities/fetchApi";
+import { baseUrlApi } from "../../../consts/baseApi";
 const imgUrl = "../../../assest/imgs/conectados_.png";
 
 export const getStaticPaths = (async () => {
@@ -27,7 +28,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { guest } = Astro.props;
-const qrUrl = `${API_BASE_URL?.baseUrl}/${guest?.id}`;
+const qrUrl = `${baseUrlApi}/${guest?.id}`;
 const qrCodeUrl = await generateQRCode(qrUrl);
 ---
 
