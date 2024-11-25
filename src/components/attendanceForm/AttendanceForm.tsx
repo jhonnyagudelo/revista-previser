@@ -3,7 +3,7 @@ import { alertHandler } from "@/utilities/alertHandler";
 import React, { useState, type FormEvent } from "react";
 
 interface AttendanceFormProps {
-  id: string;
+  document: string;
 }
 
 interface AttendanceData {
@@ -12,7 +12,7 @@ interface AttendanceData {
   document?: string; // Propiedad opcional si existe
 }
 
-export const AttendanceForm = ({ id }: AttendanceFormProps) => {
+export const AttendanceForm = ({ document }: AttendanceFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -21,11 +21,11 @@ export const AttendanceForm = ({ id }: AttendanceFormProps) => {
 
     const data = {
       eventId: "1", // Cambia este valor según sea necesario
-      document: id.toString(),
+      document: document,
     };
 
     try {
-      const endpoint = `/attendance/${id}`;
+      const endpoint = `/attendance/${document}`;
       const resp = await fetchApi<AttendanceData>(endpoint, {
         method: "PATCH",
         body: JSON.stringify(data),
@@ -36,7 +36,7 @@ export const AttendanceForm = ({ id }: AttendanceFormProps) => {
       await alertHandler(
         resp.status,
         "Asistencia confirmada correctamente.",
-        `/public/confirm/${id}`
+        `/public/confirm/${document}`
       );
     } catch (error) {
       console.error("Error al confirmar la asistencia:", error);

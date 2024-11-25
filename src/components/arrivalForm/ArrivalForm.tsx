@@ -3,7 +3,7 @@ import { alertHandler } from "@/utilities/alertHandler";
 import React, { useState, type FormEvent } from "react";
 
 interface ArrivalFormProps {
-  id: number;
+  document: number;
 }
 
 interface ArrivalData {
@@ -11,7 +11,7 @@ interface ArrivalData {
   message: string;
   clientId: string; // Propiedad opcional si existe
 }
-export const ArrivalForm = ({ id }: ArrivalFormProps) => {
+export const ArrivalForm = ({ document }: ArrivalFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -20,17 +20,16 @@ export const ArrivalForm = ({ id }: ArrivalFormProps) => {
 
     const data = {
       eventId: 1,
-      customerId: id,
+      customerId: document,
     };
 
     try {
-      const endpoint = `/arrival/${id}`;
+      const endpoint = `/arrival/${document}`;
       const resp = await fetchApi<ArrivalData>(endpoint, {
         method: "PATCH",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
-      console.log(resp);
 
       // Llamar al manejador de alertas en caso de éxito
       await alertHandler(resp.status, "Asistencia confirmada correctamente.");
