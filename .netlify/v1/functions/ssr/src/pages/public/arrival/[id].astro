@@ -1,0 +1,50 @@
+---
+import { ArrivalForm } from "../../../components/arrivalForm";
+import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
+import { fetchApi } from "../../../utilities";
+import type { Guest } from "../../../interfaces";
+const imgUrl = "../../../assest/imgs/conectados_.png";
+
+const { id } = Astro.params;
+const endpointCustomer = `/customer/${id}`; // Assuming this is a string
+
+// Consulta a la API para obtener los datos del invitado
+let guest;
+try {
+  guest = (await fetchApi(endpointCustomer)) as Guest;
+} catch (error) {
+  console.error("Error al obtener datos del invitado:", error);
+}
+
+if (!guest) {
+  throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
+}
+---
+
+<MainLayout title="Confirmar asistencia">
+  <section>
+    <img class="sm:h-5/6 sm:w-[28em]" src={imgUrl} alt="imagen" width="400" />
+    <div class="z-10 text-center p-10 center flex flex-col items-center">
+      <h1 class="sm:text-6xl p-3 text-white font-bold">Bienvenido:</h1>
+      <h2 class="sm:text-5xl p-3 text-white font-bold">
+        {guest?.data?.name?.toUpperCase()}
+        {guest?.data?.surname?.toUpperCase()}
+      </h2>
+      <ArrivalForm
+        server:defer
+        document={guest?.data?.document}
+        client:only="react"
+      />
+    </div>
+  </section>
+</MainLayout>
+<style>
+  .center {
+    transform: translate(10px, -44em);
+  }
+  @media (min-width: 768px) {
+    .qr {
+      transform: translate(10px, 10px);
+    }
+  }
+</style>

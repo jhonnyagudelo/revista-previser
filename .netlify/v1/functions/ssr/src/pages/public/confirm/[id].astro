@@ -20,7 +20,7 @@ try {
 if (!guest) {
   throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
 }
-const qrUrl = `https://revista-previser.netlify.app/public/confirm/${guest?.data?.document}`;
+const qrUrl = `${baseUrlApi}/${guest?.data?.id}`;
 const qrCodeUrl = await generateQRCode(qrUrl);
 ---
 
