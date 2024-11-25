@@ -7,6 +7,8 @@ import tailwind from "@astrojs/tailwind";
 
 import node from "@astrojs/node";
 
+import netlify from "@astrojs/netlify";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://revista.previser.com.co",
@@ -19,7 +21,5 @@ export default defineConfig({
   build: {
     assets: "public", // Guarda los estáticos directamente en la carpeta `public`
   },
-  adapter: node({
-    mode: "standalone",
-  }),
+  adapter: netlify(),
 });
