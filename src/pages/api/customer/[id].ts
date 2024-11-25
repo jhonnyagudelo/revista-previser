@@ -5,16 +5,16 @@ import type { APIRoute } from "astro";
 export const prerender = false;
 
 export const GET: APIRoute = async ({ params, request }) => {
-  const { document } = params;
+  const { id } = params;
   try {
-    const customer = await prisma.customer.findFirst({
-      where: { document: document },
+    const customer = await prisma.customer.findUnique({
+      where: { document: id },
     });
     if (!customer) {
       jsonResponse(404, "Cliente no encontrado");
     }
 
-    return jsonResponse(200, "Invitado encontrado", customer);
+    return jsonResponse(200, "Invitado encontradosss", customer);
   } catch (error) {
     console.error("Error en el servidor:", error);
     return jsonResponse(500, "Error interno del servidor.");

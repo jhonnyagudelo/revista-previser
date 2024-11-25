@@ -1,1 +1,1 @@
-export * from "./[customerId]";
+export * from "./[id]";
