@@ -1,8 +1,11 @@
 import Swal from "sweetalert2";
 
 // Mapeo de estados HTTP a funciones
-const alertMap: Record<number, (message: string,location?: string) => Promise<void>> = {
-  200: async (message: string,location?: string) => {
+const alertMap: Record<
+  number,
+  (message: string, location?: string) => Promise<void>
+> = {
+  200: async (message: string, location?: string) => {
     await Swal.fire({
       icon: "success",
       title: "Confirmación",
@@ -10,12 +13,13 @@ const alertMap: Record<number, (message: string,location?: string) => Promise<vo
     });
     location && window.location.replace(location);
   },
-  400: async (message: string) => {
+  400: async (message: string, location?: string) => {
     await Swal.fire({
       icon: "info",
       title: "Error",
       text: message,
     });
+    location && window.location.replace(location);
   },
   404: async (message: string) => {
     await Swal.fire({
@@ -27,14 +31,20 @@ const alertMap: Record<number, (message: string,location?: string) => Promise<vo
 };
 
 // Función principal que utiliza el mapa
-export const alertHandler = async (status: number, message: string,location?: string) => {
-  const alertFn = alertMap[status] || (async () => {
-    await Swal.fire({
-      icon: "error",
-      title: "Error desconocido",
-      text: "Ocurrió un error inesperado.",
+export const alertHandler = async (
+  status: number,
+  message: string,
+  location?: string
+) => {
+  const alertFn =
+    alertMap[status] ||
+    (async () => {
+      await Swal.fire({
+        icon: "error",
+        title: "Error desconocido",
+        text: "Ocurrió un error inesperado.",
+      });
     });
-  });
 
-  await alertFn(message,location);
+  await alertFn(message, location);
 };

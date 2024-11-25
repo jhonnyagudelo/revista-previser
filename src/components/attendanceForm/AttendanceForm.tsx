@@ -32,12 +32,24 @@ export const AttendanceForm = ({ document }: AttendanceFormProps) => {
         headers: { "Content-Type": "application/json" },
       });
 
+      if (resp.status === 400) {
+        await alertHandler(
+          resp.status,
+          "Asistencia ya confirmada.",
+          `/public/arrival/${document}`
+        );
+      }
       // Llamar al manejador de alertas en caso de éxito
-      await alertHandler(
-        resp.status,
-        "Asistencia confirmada correctamente.",
-        `/public/confirm/${document}`
-      );
+      if (resp.status === 200) {
+        await alertHandler(
+          resp.status,
+          "Asistencia confirmada correctamente.",
+          `/public/confirm/${document}`
+        );
+      }
+      if (resp.status === 404) {
+        await alertHandler(resp.status, "Asistencia confirmada correctamente.");
+      }
     } catch (error) {
       console.error("Error al confirmar la asistencia:", error);
       await alertHandler(500, "Ocurrió un error inesperado.");
