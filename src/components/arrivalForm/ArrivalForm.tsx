@@ -3,7 +3,7 @@ import { alertHandler } from "@/utilities/alertHandler";
 import React, { useState, type FormEvent } from "react";
 
 interface ArrivalFormProps {
-  document: number;
+  document: string;
 }
 
 interface ArrivalData {
