@@ -16,7 +16,7 @@ const alertMap: Record<
   400: async (message: string, location?: string) => {
     await Swal.fire({
       icon: "info",
-      title: "Error",
+      title: "Ya estas registrado",
       text: message,
     });
     location && window.location.replace(location);
