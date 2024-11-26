@@ -2,7 +2,7 @@ interface GuestResponse {
   id: number;
   document: string;
   name: string;
-  surname: string;
+  surname?: string;
   email?: string; // Si el correo es opcional
 }
 
