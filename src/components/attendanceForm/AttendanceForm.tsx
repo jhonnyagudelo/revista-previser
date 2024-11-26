@@ -3,7 +3,8 @@ import { alertHandler } from "@/utilities/alertHandler";
 import React, { useState, type FormEvent } from "react";
 
 interface AttendanceFormProps {
-  id: string;
+  document: string;
+  button?: string;
 }
 
 interface AttendanceData {
@@ -12,7 +13,7 @@ interface AttendanceData {
   document?: string; // Propiedad opcional si existe
 }
 
-export const AttendanceForm = ({ id }: AttendanceFormProps) => {
+export const AttendanceForm = ({ document, button }: AttendanceFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -21,23 +22,36 @@ export const AttendanceForm = ({ id }: AttendanceFormProps) => {
 
     const data = {
       eventId: "1", // Cambia este valor según sea necesario
-      document: id.toString(),
+      document: document,
     };
 
     try {
-      const endpoint = `/attendance/${id}`;
+      const endpoint = `/attendance/${document}`;
       const resp = await fetchApi<AttendanceData>(endpoint, {
         method: "PATCH",
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       });
 
+      if (resp.status === 400) {
+        await alertHandler(
+          resp.status,
+          "Dale click en el botton QR",
+          `/public/confirm/${document}`,
+          "QR"
+        );
+      }
       // Llamar al manejador de alertas en caso de éxito
-      await alertHandler(
-        resp.status,
-        "Asistencia confirmada correctamente.",
-        `/public/confirm/${id}`
-      );
+      if (resp.status === 200) {
+        await alertHandler(
+          resp.status,
+          "Se ha reservado tu lugar.",
+          `/public/confirm/${document}`
+        );
+      }
+      if (resp.status === 404) {
+        await alertHandler(resp.status, "Asistencia confirmada correctamente.");
+      }
     } catch (error) {
       console.error("Error al confirmar la asistencia:", error);
       await alertHandler(500, "Ocurrió un error inesperado.");
@@ -53,7 +67,7 @@ export const AttendanceForm = ({ id }: AttendanceFormProps) => {
         className="bg-yellow-400 sm:w-1/4 p-1 w-60 text-center rounded-md mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer font-bold text-xl"
         disabled={loading}
       >
-        {loading ? "Procesando..." : "¡Regístrate aquí!"}
+        {loading ? "Procesando..." : button}
       </button>
     </form>
   );

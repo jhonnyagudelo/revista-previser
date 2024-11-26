@@ -1,34 +1,24 @@
 ---
-import { ArrivalForm } from "@/components/arrivalForm";
-import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
-import { fetchApi } from "@/utilities";
-import type { GetStaticPaths } from "astro";
+import { ArrivalForm } from "../../../components/arrivalForm";
+import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
+import { fetchApi } from "../../../utilities";
+import type { Guest } from "../../../interfaces";
 const imgUrl = "../../../assest/imgs/conectados_.png";
 
-export const getStaticPaths = (async () => {
-  try {
-    // Cambia `http://localhost:3000` por una variable de entorno en producción
-    const endpoint = "/customer"; // Assuming this is a string
-    const guests = await fetchApi(endpoint);
+const { id } = Astro.params;
+const endpointCustomer = `/customer/${id}`; // Assuming this is a string
 
-    // Verifica que los datos sean válidos
-    if (!Array.isArray(guests)) {
-      console.error("Datos inválidos recibidos de la API");
-      return [];
-    }
+// Consulta a la API para obtener los datos del invitado
+let guest;
+try {
+  guest = (await fetchApi(endpointCustomer)) as Guest;
+} catch (error) {
+  console.error("Error al obtener datos del invitado:", error);
+}
 
-    // Mapea los datos para generar rutas dinámicas
-    return guests.map((guest) => ({
-      params: { id: guest.document.toString() },
-      props: { guest },
-    }));
-  } catch (error) {
-    console.error("Error en getStaticPaths:", error);
-    return [];
-  }
-}) satisfies GetStaticPaths;
-
-const { guest } = Astro.props;
+if (!guest) {
+  throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
+}
 ---
 
 <MainLayout title="Confirmar asistencia">
@@ -37,10 +27,14 @@ const { guest } = Astro.props;
     <div class="z-10 text-center p-10 center flex flex-col items-center">
       <h1 class="sm:text-6xl p-3 text-white font-bold">Bienvenido:</h1>
       <h2 class="sm:text-5xl p-3 text-white font-bold">
-        {guest?.name?.toUpperCase()}
-        {guest?.surname?.toUpperCase()}
+        {guest?.data?.name?.toUpperCase()}
+        {guest?.data?.surname?.toUpperCase()}
       </h2>
-      <ArrivalForm server:defer id={guest?.id} client:only="react" />
+      <ArrivalForm
+        server:defer
+        document={guest?.data?.document}
+        client:only="react"
+      />
     </div>
   </section>
 </MainLayout>

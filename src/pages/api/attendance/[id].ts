@@ -1,8 +1,51 @@
 import prisma from "@/db";
+import { jsonResponse } from "@/utilities/jsonResponse";
 
 import type { APIRoute } from "astro";
 
 export const prerender = false;
+
+export const GET: APIRoute = async ({ params, request }) => {
+  const { id } = params;
+
+  if (!id) {
+    return jsonResponse(400, "El parámetro 'id' es obligatorio.");
+  }
+
+  try {
+    // Buscar al cliente por documento
+    const customer = await prisma.customer.findUnique({
+      where: { document: id },
+    });
+
+    if (!customer) {
+      return jsonResponse(404, "Cliente no encontrado.");
+    }
+
+    // Buscar asistencia existente
+    const asistenciaExistente = await prisma.attendace.findFirst({
+      where: { customer_id: customer.id },
+    });
+
+    if (asistenciaExistente) {
+      return jsonResponse(
+        200,
+        "Asistencia ya confirmada.",
+        asistenciaExistente
+      );
+    }
+
+    // Si no hay asistencia existente
+    return jsonResponse(
+      200,
+      "El cliente existe pero no tiene asistencia registrada.",
+      customer
+    );
+  } catch (error) {
+    console.error("Error en el servidor:", error);
+    return jsonResponse(500, "Error interno del servidor.");
+  }
+};
 
 export const PATCH: APIRoute = async ({ params, request }) => {
   try {
@@ -85,15 +128,3 @@ export const PATCH: APIRoute = async ({ params, request }) => {
     return jsonResponse(500, "Error interno del servidor.");
   }
 };
-
-// Función utilitaria para respuestas JSON
-function jsonResponse(
-  status: number,
-  message: string,
-  data: any = null
-): Response {
-  return new Response(JSON.stringify({ status, message, data }), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
-}

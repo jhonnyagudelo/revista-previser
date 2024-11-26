@@ -7,6 +7,7 @@ export const prerender = false;
 export const PATCH: APIRoute = async ({ params, request }) => {
   try {
     // Parsear el cuerpo de la solicitud
+
     const { customerId, eventId } = await request.json();
 
     const eventIdNumber = Number(eventId);
@@ -19,7 +20,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
 
     // Verificar si el cliente existe
     const customer = await prisma.customer.findUnique({
-      where: { id: customerIdNumber },
+      where: { document: customerId },
     });
 
     if (!customer) {

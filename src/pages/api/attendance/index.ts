@@ -1,1 +1,1 @@
-export * from "./[attendanceId]";
+export * from "./[id]";
