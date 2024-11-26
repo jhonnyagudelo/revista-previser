@@ -40,8 +40,8 @@ try {
 } catch (error) {
   console.error("Error al obtener datos del invitado:", error);
 }
-
-const msgButton = confirm?.data?.confirm_attendance
+let msgButton;
+msgButton = confirm?.data?.confirm_attendance
   ? "Obtener Qr"
   : "¡Reserva mi lugar!";
 ---
@@ -94,7 +94,11 @@ const msgButton = confirm?.data?.confirm_attendance
     </div>
     <div class="bg-white rounded text-center mb-3">
       <p class="text-blue-800 text-xl">
-        Por favor, <span class="font-bold">confirma tu lugar</span>
+        {
+          (msgButton = confirm?.data?.confirm_attendance
+            ? null
+            : 'Por favor, <span class="font-bold">confirma tu lugar</span>')
+        }
       </p>
     </div>
     <p class="text-white text-center text-xl">
