@@ -36,7 +36,7 @@ export const AttendanceForm = ({ document }: AttendanceFormProps) => {
         await alertHandler(
           resp.status,
           "Asistencia ya confirmada.",
-          `/public/arrival/${document}`
+          `/public/confirm/${document}`
         );
       }
       // Llamar al manejador de alertas en caso de éxito
