@@ -4,6 +4,7 @@ import React, { useState, type FormEvent } from "react";
 
 interface AttendanceFormProps {
   document: string;
+  button?: string;
 }
 
 interface AttendanceData {
@@ -12,7 +13,7 @@ interface AttendanceData {
   document?: string; // Propiedad opcional si existe
 }
 
-export const AttendanceForm = ({ document }: AttendanceFormProps) => {
+export const AttendanceForm = ({ document, button }: AttendanceFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -35,15 +36,16 @@ export const AttendanceForm = ({ document }: AttendanceFormProps) => {
       if (resp.status === 400) {
         await alertHandler(
           resp.status,
-          "Asistencia ya confirmada.",
-          `/public/confirm/${document}`
+          "Dale click en el botton QR",
+          `/public/confirm/${document}`,
+          "QR"
         );
       }
       // Llamar al manejador de alertas en caso de éxito
       if (resp.status === 200) {
         await alertHandler(
           resp.status,
-          "Asistencia confirmada correctamente.",
+          "Se ha reservado tu lugar.",
           `/public/confirm/${document}`
         );
       }
@@ -65,7 +67,7 @@ export const AttendanceForm = ({ document }: AttendanceFormProps) => {
         className="bg-yellow-400 sm:w-1/4 p-1 w-60 text-center rounded-md mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer font-bold text-xl"
         disabled={loading}
       >
-        {loading ? "Procesando..." : "¡Reserva mi lugar!"}
+        {loading ? "Procesando..." : button}
       </button>
     </form>
   );

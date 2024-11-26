@@ -3,7 +3,7 @@ import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
 import Sites from "@/components/sites/Sites.astro";
 import { AttendanceForm } from "@/components/attendanceForm";
 import { fetchApi } from "@/utilities";
-import type { Guest } from "@/interfaces";
+import type { Guest, Attendance } from "@/interfaces";
 const imgLogo = "../../../assest/imgs/logo_conectado.png";
 const imgConect = "../../../assest/imgs/conectados.png";
 
@@ -19,13 +19,31 @@ const endpointCustomer = `/customer/${id}`; // Assuming this is a string
 let guest = null;
 try {
   guest = (await fetchApi(endpointCustomer)) as Guest;
+
+  if (guest?.status === 404) {
+    return Astro.redirect("/404");
+  }
+} catch (error) {
+  console.error("Error al obtener datos del invitado:", error);
+  return Astro.redirect("/404");
+}
+
+if (!guest) {
+  return Astro.redirect("/404");
+}
+
+const endpointAttendance = `/attendance/${id}`; // Assuming this is a string
+let confirm = null;
+
+try {
+  confirm = (await fetchApi(endpointAttendance)) as Attendance;
 } catch (error) {
   console.error("Error al obtener datos del invitado:", error);
 }
 
-if (!guest) {
-  throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
-}
+const msgButton = confirm?.data?.confirm_attendance
+  ? "Obtener Qr"
+  : "¡Reserva mi lugar!";
 ---
 
 <MainLayout title="Home">
@@ -70,12 +88,13 @@ if (!guest) {
       <AttendanceForm
         server:defer
         document={guest?.data?.document}
+        button={msgButton}
         client:only="react"
       />
     </div>
     <div class="bg-white rounded text-center mb-3">
       <p class="text-blue-800 text-xl">
-        Por favor, <span class="font-bold">confirma tu asistencia</span>
+        Por favor, <span class="font-bold">confirma tu lugar</span>
       </p>
     </div>
     <p class="text-white text-center text-xl">

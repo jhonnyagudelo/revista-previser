@@ -6,7 +6,7 @@ export const fetchApi = async <T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> => {
-  const url = `${baseUrlApi}${endpoint}`;
+  const url = `${baseUrlLocal}${endpoint}`;
   const response = await fetch(url, options);
 
   // if (!response.ok) {
