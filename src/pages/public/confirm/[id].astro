@@ -20,7 +20,7 @@ try {
 if (!guest) {
   throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
 }
-const qrUrl = `https://revista-previser/public/arrival/${guest?.data?.document}`;
+const qrUrl = `https://revista.previser.com.co/public/arrival/${guest?.data?.document}`;
 const qrCodeUrl = await generateQRCode(qrUrl);
 ---
 
