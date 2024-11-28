@@ -47,7 +47,7 @@ export const ArrivalForm = ({ document }: ArrivalFormProps) => {
         className="bg-yellow-400 sm:w-2/3 p-1 w-60 text-center rounded-md mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer font-bold text-xl"
         disabled={loading}
       >
-        {loading ? "Procesando..." : "¡Asistencia confirmada!"}
+        {loading ? "Procesando..." : "¡Confirmar asistencia!"}
       </button>
     </form>
   );
