@@ -44,7 +44,7 @@ let msgButton;
 msgButton = confirm?.data?.confirm_attendance
   ? "Obtener Qr"
   : "¡Reserva mi lugar!";
-const isAttendanceConfirmed = msgButton ?? false;
+const isAttendanceConfirmed = confirm?.data?.confirm_attendance ?? false;
 
 const attendanceMessage = isAttendanceConfirmed
   ? null
