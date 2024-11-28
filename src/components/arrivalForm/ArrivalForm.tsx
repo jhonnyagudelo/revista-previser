@@ -44,7 +44,7 @@ export const ArrivalForm = ({ document }: ArrivalFormProps) => {
     <form onSubmit={handleSubmit}>
       <button
         type="submit"
-        className="bg-yellow-400 sm:w-1/4 p-1 w-60 text-center rounded-md mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer font-bold text-xl"
+        className="bg-yellow-400 sm:w-2/3 p-1 w-60 text-center rounded-md mb-5 hover:bg-yellow-200 transition ease-in duration-500 cursor-pointer font-bold text-xl"
         disabled={loading}
       >
         {loading ? "Procesando..." : "¡Asistencia confirmada!"}
