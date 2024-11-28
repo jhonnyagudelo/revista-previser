@@ -2,6 +2,7 @@
 import HeadBase from "@/components/headBase/HeadBase.astro";
 import Header from "@/components/header/Header.astro";
 import { siteInfo } from "@/consts";
+import { ViewTransitions } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -9,17 +10,15 @@ interface Props {
   description?: string;
 }
 
-const {
-  title = siteInfo?.title,
-  description = siteInfo?.description,
-  image,
-} = Astro.props;
+const { title = siteInfo?.title, description = siteInfo?.description } =
+  Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <HeadBase title={title} description={description} />
+    <ViewTransitions />
   </head>
   <body class="bg-blue-800">
     <Header />
