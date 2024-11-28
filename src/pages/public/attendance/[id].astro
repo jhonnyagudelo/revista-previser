@@ -44,6 +44,11 @@ let msgButton;
 msgButton = confirm?.data?.confirm_attendance
   ? "Obtener Qr"
   : "¡Reserva mi lugar!";
+const isAttendanceConfirmed = msgButton ?? false;
+
+const attendanceMessage = isAttendanceConfirmed
+  ? null
+  : "Por favor, confirma tu lugar.";
 ---
 
 <MainLayout title="Home">
@@ -93,13 +98,13 @@ msgButton = confirm?.data?.confirm_attendance
       />
     </div>
     <div class="bg-white rounded text-center mb-3">
-      <p class="text-blue-800 text-xl">
-        {
-          (msgButton = confirm?.data?.confirm_attendance
-            ? null
-            : 'Por favor, <span class="font-bold">confirma tu lugar</span>')
-        }
-      </p>
+      {
+        attendanceMessage && (
+          <div class="bg-white rounded text-center mb-3">
+            <p class="text-blue-800 text-xl">{attendanceMessage}</p>
+          </div>
+        )
+      }
     </div>
     <p class="text-white text-center text-xl">
       No te pierdas la oportunidad única de <span
