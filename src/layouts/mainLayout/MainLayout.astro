@@ -2,7 +2,7 @@
 import HeadBase from "@/components/headBase/HeadBase.astro";
 import Header from "@/components/header/Header.astro";
 import { siteInfo } from "@/consts";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -18,9 +18,9 @@ const { title = siteInfo?.title, description = siteInfo?.description } =
 <html lang="en">
   <head>
     <HeadBase title={title} description={description} />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
-  <body class="bg-blue-800">
+  <body class="primary-white-hueso">
     <Header />
     <main>
       <slot />

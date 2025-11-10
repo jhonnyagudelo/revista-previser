@@ -5,7 +5,7 @@ import { generateQRCode } from "../../../components/qrCodeGenerate";
 import { fetchApi } from "../../../utilities/fetchApi";
 import { baseUrlApi } from "../../../consts/baseApi";
 import type { Guest } from "@/interfaces";
-const imgUrl = "../../../assest/imgs/conectados_.png";
+const imgUrl = "../../../assets/imgs/conectados_.png";
 
 const { id } = Astro.params;
 const endpointCustomer = `/customer/${id}`; // Assuming this is a string
@@ -20,7 +20,7 @@ try {
 if (!guest) {
   throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
 }
-const qrUrl = `https://revista.previser.com.co/public/arrival/${guest?.data?.document}`;
+const qrUrl = `http://localhost:4321/public/arrival/${guest?.data?.document}`;
 const qrCodeUrl = await generateQRCode(qrUrl);
 ---
 

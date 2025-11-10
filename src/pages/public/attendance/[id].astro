@@ -4,8 +4,11 @@ import Sites from "@/components/sites/Sites.astro";
 import { AttendanceForm } from "@/components/attendanceForm";
 import { fetchApi } from "@/utilities";
 import type { Guest, Attendance } from "@/interfaces";
-const imgLogo = "../../../assest/imgs/logo_conectado.png";
-const imgConect = "../../../assest/imgs/conectados.png";
+import { Image } from "astro:assets";
+import imgLogo from "public/assets/imgs/Landig Invitación Late verde segmentada_logo.png";
+import imgFondoHeader from "public/assets/imgs/Landig Invitación Late verde segmentada_Fondo 1.png";
+import imgCamilaGiraldo from "public/assets/imgs/Landig Invitación Late verde segmentada_foto camila.png";
+import hojaVerte from "public/assets/imgs/Landig Invitación Late verde segmentada_hojas f2.png";
 
 const endpoint = "/event"; // Assuming this is a string
 
@@ -43,7 +46,7 @@ try {
 let msgButton;
 msgButton = confirm?.data?.confirm_attendance
   ? "Obtener Qr"
-  : "¡Reserva mi lugar!";
+  : "¡Confirma aquí tu asistencia!";
 const isAttendanceConfirmed = confirm?.data?.confirm_attendance ?? false;
 
 const attendanceMessage = isAttendanceConfirmed
@@ -52,44 +55,93 @@ const attendanceMessage = isAttendanceConfirmed
 ---
 
 <MainLayout title="Home">
-  <section class="flex flex-col items-center">
-    <h3 class="sm:text-3xl text-xl text-white">
-      Estás cordialmente invitado a
-    </h3>
-    <img class="m-3" src={imgLogo} width="250" height="250" alt="Logo" />
-  </section>
-  <section></section>
-  <section>
-    <img
-      class="items-center flex sm:w-fit p-3"
-      src={imgConect}
-      alt="Conectados"
+  <section class="relative flex justify-center items-center flex-col">
+    {/* Fondo: Ocupa todo el espacio, sigue siendo responsive */}
+    <Image
+      src={imgFondoHeader}
+      alt="Fondo de la cabecera"
+      class="w-full h-auto"
     />
-    <p class="sm:text-xl text-2xl text-white p-8 text-center">
-      Únete a nosotros en una noche diseñada para celebrar nuestra alianza,
-      compartir experiencias y crear conexiones valiosas. Queremos que seas
-      parte de este encuentro especial, donde celebramos nuestro compromiso
-      mutuo de ofrecer el mejor servicio a las más de 1.000 familias que confían
-      en Previser.
-    </p>
-    <div class="border-b-2 border-white w-10/12 mx-auto"></div>
-    <div>
-      <h1 class="text-3xl p-5 text-white text-center m-0">
-        {guest?.data?.name?.toUpperCase()}
-        {guest?.data?.surname?.toUpperCase()}
-      </h1>
-      {
-        Array.isArray(response) ? (
-          response.map((event) => <Sites event={event} />)
-        ) : (
-          <p>No events found</p>
-        )
-      }
-    </div>
+
+    {/* Contenedor del Logo: ¡Aquí están los cambios! */}
+    <article
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[40%]
+           backdrop-blur-md rounded-lg p-4
+           max-w-[90%]
+           md:max-w-[600px]
+           w-auto flex justify-center items-center"
+    >
+      <Image
+        class="w-full h-auto max-w-full object-contain"
+        src={imgLogo}
+        alt="Logo"
+      />
+    </article>
   </section>
-  <section class="pb-8 mb-14">
+  <section
+    class="bg-green-mate w-full flex flex-col md:flex-row justify-around items-center gap-6 py-8 px-4"
+  >
+    <article class="grid md:grid-cols-2 gap-6 items-center relative w-[90vw]">
+      <div class="relative order-2 md:order-none">
+        <div
+          class="relative flex items-center max-md:justify-center bg-white p-4 md:p-8 rounded-3xl text-center xl:w-[65em] md:w-[50em] xl:h-[30em] lg:h-[20em] md:h-[20em]"
+        >
+          <!-- Contenido (debajo) -->
+          <div class="relative z-10 md:w-[50%] lg:w-[70%]">
+            <p class="text-sm md:text-xl">Bajo el lema</p>
+
+            <p
+              class="bg-green font-bold text-primary-white-hueso px-1 rounded text-base md:text-xl inline-block"
+            >
+              "Previser ecodigital late verde"
+            </p>
+
+            <p class="text-sm md:text-xl">
+              Un paso más hacia un futuro más sostenible y digital
+            </p>
+
+            <div class="my-4">
+              <AttendanceForm
+                server:defer
+                document={guest?.data?.document}
+                button={msgButton}
+                client:only="react"
+              />
+            </div>
+
+            <p class="text-xs md:text-2xl font-bold">
+              Hasta el 16 de noviembre
+            </p>
+          </div>
+
+          <!-- 🌿 Hojas encima -->
+          <div class="absolute inset-0 flex items-center pointer-events-none">
+            <Image
+              class="object-contain z-30 opacity-90 w-[20em] max-sm:w-[14em] drop-shadow-lg"
+              src={hojaVerte}
+              alt="Hoja verde"
+              width={500}
+              height={500}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="order-1 md:order-none">
+        <picture class="flex justify-center items-center">
+          <Image
+            class="w-full max-md:w-[30em] max-sm:w-[14em] h-auto max-w-full object-contain"
+            src={imgCamilaGiraldo}
+            alt="Camila Giraldo"
+          />
+        </picture>
+      </div>
+    </article>
+  </section>
+</MainLayout>
+<!-- <section class="pb-8 mb-14">
     <div class="text-center">
-      <!-- Aquí puedes incluir el formulario u otros componentes -->
+      Aquí puedes incluir el formulario u otros componentes
       <AttendanceForm
         server:defer
         document={guest?.data?.document}
@@ -112,5 +164,4 @@ const attendanceMessage = isAttendanceConfirmed
       >
       <span> ¡Te esperamos con los brazos abiertos! </span>
     </p>
-  </section>
-</MainLayout>
+  </section>-->
