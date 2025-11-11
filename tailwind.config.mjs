@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         'primary-blue': 'var(--color-brand-primary-blue)',
-        'secondary-blue': 'var(--color-brand-blue-ligth)',
+        'secondary-blue': 'var(--color-brand-primary-blue-light)',
         'green': 'var(--color-brand-secondary-green)',
         'light-green': 'var(--color-brand-secondary-green-light)',
         'yellow': 'var(--color-yellow)',

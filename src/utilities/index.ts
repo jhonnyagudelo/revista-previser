@@ -4,3 +4,4 @@ export * from "./formatDateOrTime";
 export * from "./getBaseApi";
 export * from "./getConfirmationTime";
 export * from "./routes";
+export * from "./capitalize";

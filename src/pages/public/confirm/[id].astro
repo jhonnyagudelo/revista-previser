@@ -1,55 +1,81 @@
 ---
-import type { GetStaticPaths } from "astro";
 import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
 import { generateQRCode } from "../../../components/qrCodeGenerate";
 import { fetchApi } from "../../../utilities/fetchApi";
-import { baseUrlApi } from "../../../consts/baseApi";
 import type { Guest } from "@/interfaces";
-const imgUrl = "../../../assets/imgs/conectados_.png";
+import { Image } from "astro:assets";
+import logoImg from "public/assets/imgs/logo-fondo-24.png";
 
 const { id } = Astro.params;
-const endpointCustomer = `/customer/${id}`; // Assuming this is a string
+
+// Validación temprana del parámetro
+if (!id) {
+  throw new Error("ID del invitado es requerido");
+}
+
+const endpointCustomer = `/customer/${id}`;
 
 // Consulta a la API para obtener los datos del invitado
-let guest;
+let guest: Guest;
 try {
   guest = (await fetchApi(endpointCustomer)) as Guest;
 } catch (error) {
-  console.error("Error al obtener datos del invitado:", error);
+  console.error(`Error al obtener datos del invitado ${id}:`, error);
+  throw new Error(`No se pudo obtener los datos del invitado con ID: ${id}`);
 }
-if (!guest) {
-  throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
+
+// Validación de datos del guest
+if (!guest?.data?.document) {
+  throw new Error(`Datos incompletos para el invitado con ID: ${id}`);
 }
-const qrUrl = `http://localhost:4321/public/arrival/${guest?.data?.document}`;
+
+// Generar QR solo después de validar todos los datos
+const qrUrl = `${Astro.url.origin}/public/arrival/${guest.data.document}`;
 const qrCodeUrl = await generateQRCode(qrUrl);
+
+// Formatear nombre completo
+const fullName = `${guest.data.name?.toUpperCase() || ''} ${guest.data.surname?.toUpperCase() || ''}`.trim();
+
 ---
 
-<MainLayout title="Qr">
-  <section>
-    <article class="sm:flex sm:items-center h-dvh sm:h-5/6">
-      <link rel="preload" href={qrCodeUrl} as="image" />
-      <img class="sm:h-5/6 sm:w-[28em]" src={imgUrl} alt="imagen" width="400" />
-      <div class="z-10 text-center p-10 qr flex flex-col items-center">
-        <h1 class="sm:text-5xl p-3 text-white font-bold">
-          {guest?.data?.name?.toUpperCase()}
-          {guest?.data?.surname?.toUpperCase()}
-        </h1>
-        <img
-          src={qrCodeUrl}
-          alt="Código QR generado"
-          class="sm:w-96 sm:h-96 w-60 h-60"
-        />
+<MainLayout title={`QR - ${fullName}`}>
+  <section class='bg-green-mate h-[89dvh] '>
+    <div>
+      <picture class=" ">
+      <Image 
+        src={logoImg} 
+        alt="Logo Previser" 
+        width={300}
+        height={300}
+      />
+      </picture>
+    <article class="bg-green rounded-2xl w-[70%] mx-auto max-sm:w-[90%] translate-y-16">
+      <div class="flex justify-center items-center flex-col pt-6">
+        <h1 class="text-white font-bold text-5xl">Gracias</h1>
+        <h3 class="text-white font-bold text-xl">Por confirmar tu asistencia</h3>
+      </div>
+      <div class="grid grid-cols-2 gap-4  items-center justify-items-center p-5 ">
+        <div class=" h-full flex content-stretch z-10 max-sm:z-0">
+          <link rel="preload" href={qrCodeUrl} as="image" />
+          <img
+            src={qrCodeUrl}
+            alt={`Código QR para ${fullName}`}
+            class="rounded-2xl"
+            loading="eager"
+          />
+        </div>
+        <div>
+          <h1 class="sm:text-3xl p-3 text-white font-bold">
+            {fullName}
+          </h1>
+          <div class="text-center text-white font-medium sm:text-xl bg-yellow rounded-2xl p-5 max-sm:p-1 -translate-x-24 max-sm:-translate-x-0">
+            <p class="text-black max-sm:text-sm">Presente este QR para el ingreso a la convención de previser Late Verde</p>
+
+          </div>
+        </div>
       </div>
     </article>
+    </div>
   </section>
 </MainLayout>
-<style>
-  .qr {
-    transform: translate(10px, -44em);
-  }
-  @media (min-width: 768px) {
-    .qr {
-      transform: translate(10em, 10px);
-    }
-  }
-</style>
+

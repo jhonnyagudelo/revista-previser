@@ -9,6 +9,11 @@ import imgLogo from "public/assets/imgs/Landig Invitación Late verde segmentada
 import imgFondoHeader from "public/assets/imgs/Landig Invitación Late verde segmentada_Fondo 1.png";
 import imgCamilaGiraldo from "public/assets/imgs/Landig Invitación Late verde segmentada_foto camila.png";
 import hojaVerte from "public/assets/imgs/Landig Invitación Late verde segmentada_hojas f2.png";
+import iconVacation from "public/assets/imgs/Landig Invitación Late verde segmentada_imagen 4 f4.png";
+import iconEducation from "public/assets/imgs/Landig Invitación Late verde segmentada_imagen 3 f4.png";
+import tradeIcon from "public/assets/imgs/Landig Invitación Late verde segmentada_imagen 2 f4.png";
+import medicinaIcon from "public/assets/imgs/Landig Invitación Late verde segmentada_imagen 1 f4.png";
+import petIcon from 'public/assets/imgs/Landig Invitación Late verde segmentada_imagen 5 f4.png'
 
 const endpoint = "/event"; // Assuming this is a string
 
@@ -138,30 +143,37 @@ const attendanceMessage = isAttendanceConfirmed
       </div>
     </article>
   </section>
-</MainLayout>
-<!-- <section class="pb-8 mb-14">
-    <div class="text-center">
-      Aquí puedes incluir el formulario u otros componentes
-      <AttendanceForm
-        server:defer
-        document={guest?.data?.document}
-        button={msgButton}
-        client:only="react"
-      />
-    </div>
-    <div class="bg-white rounded text-center mb-3">
+  <section class="bg-white flex justify-center items-center">
+    <div class="w-[80%] flex flex-col justify-center rounded-b-3xl">
+      <h1 class="text-3xl pt-4 text-white text-center m-0 bg-green">
+        {guest?.data?.name?.toUpperCase()}
+        {guest?.data?.surname?.toUpperCase()}
+      </h1>
       {
-        attendanceMessage && (
-          <div class="bg-white rounded text-center mb-3">
-            <p class="text-blue-800 text-xl">{attendanceMessage}</p>
-          </div>
+        Array.isArray(response) ? (
+          response.map((event) => <Sites event={event} />)
+        ) : (
+          <p>No events found</p>
         )
       }
     </div>
-    <p class="text-white text-center text-xl">
-      No te pierdas la oportunidad única de <span
-        >fortalecer tu presencia en el ecosistema Previser</span
-      >
-      <span> ¡Te esperamos con los brazos abiertos! </span>
+  </section>
+  <section
+    class="p-4 bg-gradient-to-b from-primary-blue to-secondary-blue mt-3"
+  >
+    <p class="text-white text-center text-lg md:text-xl font-semibold">
+      Gracias por ser parte de esta gran red que late por el bienestar de las
+      familias colombianas
     </p>
-  </section>-->
+  </section>
+  <section class=" bg-green-mate pb-3">
+    <article class="grid grid-cols-5 max-sm:grid-cols-2">
+    <Image class="p-5" src={medicinaIcon} alt="Medicina Icon" />
+    <Image class="p-5" src={tradeIcon} alt="Trade Icon" />
+    <Image class="p-5" src={iconEducation} alt="Education Icon" />
+    <Image class="p-5" src={iconVacation} alt="Vacation Icon" />
+    <Image class="p-5" src={petIcon} alt="pet Icon" />
+    </article>
+    <p class="text-xl font-bold text-black text-center w-2/3 mx-auto">Su compromiso impulsa nuestro propósito de conectar beneficios, sostenibilidad y experiencia reales para miles de personas en todo el país </p>
+  </section>
+</MainLayout>
