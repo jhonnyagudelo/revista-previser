@@ -49,14 +49,11 @@ try {
   console.error("Error al obtener datos del invitado:", error);
 }
 let msgButton;
+
 msgButton = confirm?.data?.confirm_attendance
   ? "Obtener Qr"
   : "¡Confirma aquí tu asistencia!";
-const isAttendanceConfirmed = confirm?.data?.confirm_attendance ?? false;
 
-const attendanceMessage = isAttendanceConfirmed
-  ? null
-  : "Por favor, confirma tu lugar.";
 ---
 
 <MainLayout title="Home">
