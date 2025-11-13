@@ -3,8 +3,12 @@ import { ArrivalForm } from "../../../components/arrivalForm";
 import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
 import { fetchApi } from "../../../utilities";
 import type { Guest } from "../../../interfaces";
+import { Image } from "astro:assets";
 
-const imgUrl = "../../../assets/imgs/conectados_.png";
+import imgFondoHeader from "@public/assets/imgs/Landig Invitación Late verde segmentada_Fondo 1.png";
+import imgLogo from "@public/assets/imgs/Landig Invitación Late verde segmentada_logo.png";
+import lineGreen from "@public/assets/imgs/lineaVerde.png";
+import hojaVerte from "@public/assets/imgs/Landig Invitación Late verde segmentada_hojas f2.png";
 
 const { id } = Astro.params;
 
@@ -28,41 +32,75 @@ try {
   console.error("Error al obtener datos del invitado:", error);
   errorMessage = "Error al cargar los datos del invitado. Intente nuevamente.";
 }
+
+
 ---
 
 <MainLayout title="Confirmar asistencia">
-  <section
-    class="relative min-h-screen flex flex-col items-center justify-center"
-  >
-    <img
-      class="absolute inset-0 w-full h-full object-cover"
-      src={imgUrl}
-      alt="Imagen de bienvenida"
-      loading="eager"
-    />
+  <section class="relative flex items-center flex-col max-sm:h-dvh ">
+
+    <figure class="max-sm:w-full">
+      <Image
+        src={imgFondoHeader}
+        alt="Fondo de la cabecera"
+        class=""
+      />
+      </figure>
+
+    <article class="absolute inset-0 flex flex-col top-1/3 max-sm:top-[6em] max-lg:top-[18em] max-xl:top-[22em] max-md:top-[13em] items-center">
+      <p class='text-green text-9xl max-xl:text-7xl max-lg:text-7xl  max-md:text-5xl max-sm:text-3xl font-bold px-4 text-center'>
+        Bienvenido:
+      </p>
+      
+      <Image
+        src={lineGreen}
+        alt="Línea verde decorativa"
+        class="w-full max-w-xs" 
+        />
+    </article>
 
     {
       errorMessage ? (
-        <div class="z-10 text-center p-10 bg-red-500/80 rounded-lg">
+        <section class="z-10 text-center p-10 bg-red-500/80 rounded-lg">
           <p class="text-white text-xl">{errorMessage}</p>
-        </div>
+        </section>
       ) : (
-        <div class="z-10 text-center p-10 bg-black/30 rounded-lg backdrop-blur-sm">
-          <h1 class="text-4xl sm:text-6xl p-3 text-white font-bold">
-            Bienvenido:
-          </h1>
-          <h2 class="text-3xl sm:text-5xl p-3 text-white font-bold">
-            {guest?.data?.name?.toUpperCase()}
-            {guest?.data?.surname?.toUpperCase()}
-          </h2>
-          {guest?.data?.document && (
-            <ArrivalForm document={guest.data.document} client:only="react" />
-          )}
-        </div>
+        <section class="bg-green-mate gap-2 w-dvw text-center  p-6 ">
+          <article class=" h-[20em] flex flex-col justify-center ">
+            <p class="font-bold text-3xl text-primary-blue">{guest?.data?.name}</p>
+            <p class="font-bold text-3xl text-primary-blue" >{guest?.data?.phone}</p>
+            {guest?.data?.document && (
+              <ArrivalForm document={guest.data.document} client:only="react" />
+            )}
+          </article>
+        </section>
       )
     }
+    <section class="">
+      <article class="relative flex justify-center items-center h-[20em]">
+        <figure  >
+          <Image 
+            class ="absolute h-full"
+            src={hojaVerte} 
+            alt="hojaVerte"
+            width={500}
+            height={500}
+          />
+          <Image 
+            class ="relative z-10"
+            src={imgLogo} 
+            alt="Logo"
+            width={300}
+            height={300}
+          />
+        </figure>
+      </article>
+    </section>
   </section>
+
 </MainLayout>
+
+
 
 <style>
   @media (min-width: 768px) {
@@ -71,3 +109,5 @@ try {
     }
   }
 </style>
+
+

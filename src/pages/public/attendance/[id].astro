@@ -43,18 +43,17 @@ try {
   console.error("Error al obtener datos del invitado:", error);
 }
 let msgButton;
+const qr  =confirm?.data?.confirm_attendance
 
-msgButton = confirm?.data?.confirm_attendance
+msgButton = qr 
   ? "Obtener Qr"
   : "¡Confirma aquí tu asistencia!";
 
-console.log("Guest Data:", msgButton);
-console.log("Attendance Data:", confirm?.data?.confirm_attendance);
 ---
 
 <MainLayout title="Home">
   <HeaderSection />
-  <GuestSection guest={guest} msgButton={msgButton} response={response} />
+  <GuestSection guest={guest} msgButton={msgButton} response={response} confirm={qr} />
   <IconsSection/>
 
 </MainLayout>

@@ -32,10 +32,17 @@ export const fetchApi = async <T>(
   try {
     const response = await fetch(url, mergedOptions);
 
-    if (!response.ok) {
+    if (!response.ok && response?.status === 500) {
       const error: FetchError = new Error(
         `HTTP Error ${response.status}: ${response.statusText}`,
       );
+      error.status = response.status;
+      error.statusText = response.statusText;
+      throw error;
+    }
+
+    if (!response.ok) {
+      const error: FetchError = new Error("");
       error.status = response.status;
       error.statusText = response.statusText;
       throw error;

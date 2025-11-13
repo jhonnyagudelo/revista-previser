@@ -35,7 +35,10 @@ export const ArrivalForm = ({ document }: ArrivalFormProps) => {
       await alertHandler(resp.status, "Asistencia confirmada correctamente.");
     } catch (error) {
       console.error("Error al confirmar la asistencia:", error);
-      await alertHandler(500, "Ocurrió un error inesperado.");
+      await alertHandler(
+        error?.status || 500,
+        error?.message || "Error al confirmar la asistencia.",
+      );
     } finally {
       setLoading(false);
     }
