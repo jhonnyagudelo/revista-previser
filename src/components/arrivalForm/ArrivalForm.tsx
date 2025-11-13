@@ -33,7 +33,7 @@ export const ArrivalForm = ({ document }: ArrivalFormProps) => {
 
       // Llamar al manejador de alertas en caso de éxito
       await alertHandler(resp.status, "Asistencia confirmada correctamente.");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al confirmar la asistencia:", error);
       await alertHandler(
         error?.status || 500,
