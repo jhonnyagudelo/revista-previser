@@ -1,5 +1,28 @@
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 
+
+/*VARIABLES DE COLORES DE COLORES BASE*/
+:root {
+  /* Nombres claros y consistentes para tu paleta */
+  --color-brand-primary-blue: #0026b2; /* Azul de marca */
+  --color-brand-primary-blue-light:#0084EA; /* Azul claro de marca */
+  --color-brand-secondary-green-light: #33CC66; /* Verde de marca */
+  --color-brand-secondary-green:#1E7D28;
+  --color-yellow:#FFD823;
+  --color-white:#F5FFE3;
+  --color-green-mate:#DEFFD4;
+}
+
+/* stylelint-disable-next-line */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/*VARIABLES DE COLORES DE COLORES BASE*/
+
+
+
 /* Document
    ========================================================================== */
 
@@ -9,6 +32,7 @@
  */
 
 html {
+   font-family: monospace, monospace;
   line-height: 1.15;
   /* 1 */
   -webkit-text-size-adjust: 100%;

@@ -1,0 +1,30 @@
+---
+import { Image } from "astro:assets";
+import imgLogo from "@public/assets/imgs/Landig Invitación Late verde segmentada_logo.png";
+import imgFondoHeader from "@public/assets/imgs/Landig Invitación Late verde segmentada_Fondo 1.png";
+
+---
+
+  <section class="relative flex justify-center items-center flex-col">
+    {/* Fondo: Ocupa todo el espacio, sigue siendo responsive */}
+    <Image
+      src={imgFondoHeader}
+      alt="Fondo de la cabecera"
+      class="w-full h-auto"
+    />
+
+    {/* Contenedor del Logo: ¡Aquí están los cambios! */}
+    <article
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[40%]
+           backdrop-blur-md rounded-lg p-4
+           max-w-[90%]
+           md:max-w-[600px]
+           w-auto flex justify-center items-center"
+    >
+      <Image
+        class="w-full h-auto max-w-full object-contain"
+        src={imgLogo}
+        alt="Logo"
+      />
+    </article>
+  </section>

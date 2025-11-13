@@ -1,1 +1,1 @@
-export const baseUrlApi = "https://revista.previser.com.co/api";
+export const baseUrlApi = "http://localhost:4321/api";

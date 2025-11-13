@@ -1,5 +1,6 @@
 ---
 import { formatDateOrTime } from "@/utilities/formatDateOrTime";
+import { capitalize } from "@/utilities/capitalize";
 import type { event } from "@prisma/client";
 
 interface Props {
@@ -12,33 +13,60 @@ const { event } = Astro.props;
 ---
 
 <div
-  class="bg-blue-800 text-white rounded-lg p-4 mb-4 text-center"
+  class="bg-green rounded-b-3xl text-white p-4 mb-4 text-center sm:w-as[80%] md:w-[100%]"
   aria-labelledby={`event-${event.id}`}
 >
   <h1 id={`event-${event.id}`} class="text-2xl text-white font-bold">
-    Te esperamos:
+    Te esperamose el dia:
   </h1>
-  <div class="flex justify-center items-center mt-2">
-    <div class="text-xl font-bold flex justify-center items-center sm:text-xs">
+
+  <div
+    class="grid grid-cols-2 max-sm:grid-cols-1 gap-4 mt-4 md:flex md:justify-center md:items-center"
+  >
+    <div
+      class="text-xl font-bold sm:text-xs text-center flex justify-center items-center"
+    >
       <span class="p-2 text-xl">
-        {formatDateOrTime(event?.date, "dddd").toLocaleUpperCase()}
+        {capitalize(formatDateOrTime(event?.date, "dddd").toLocaleUpperCase())}
       </span>
-      <div
-        class="flex flex-col items-center border-2 border-white bg-white rounded"
-      >
-        <span class="text-7xl text-blue-800">
-          {formatDateOrTime(event?.date, "D")}
-        </span>
-        <span class="text-xl font-bold text-blue-800">
-          {formatDateOrTime(event?.date, "MMMM").toLocaleUpperCase()}
-        </span>
-      </div>
-      <span class="p-2 text-2xl">{"6:00 PM"}</span>
+
+      <span class="text-7xl max-sm:text-4xl text-white">
+        {formatDateOrTime(event?.date, "D")}
+      </span>
+
+      <span class="text-xl font-bold text-white p-2">
+        {capitalize(formatDateOrTime(event?.date, "MMMM").toLocaleUpperCase())}
+      </span>
+    </div>
+
+    <div
+      class="hidden md:block
+                h-12
+                w-4
+                border-l-4 /* Línea vertical izquierda */
+                border-white mx-4"
+    >
+    </div>
+
+    <div
+      class="text-xl font-bold sm:text-xs text-center flex justify-center items-center"
+    >
+      <span class="p-2 text-xl">Hora:</span>
+      <span class="p-2 text-7xl max-sm:text-4xl">{"6:00"}</span>
+      <span class="p-2 text-xl">{"P.M."}</span>
     </div>
   </div>
-  <div class="mt-4">
-    <p class="text-xl">
-      <span class="text-2xl font-semibold">Lugar :</span>
+</div>
+<div
+  class="bg-yellow rounded-3xl p-3 flex gap-2 justify-center items-center text-center w-4/6 mx-auto max-sm:m-0 max-sm:w-full"
+>
+  <p
+    class="text-xl text-yellow bg-green rounded-xl p-2 max-sm:pl-3 max-sm:pr-8"
+  >
+    <span class="text-2xl max-sm:text-lg font-semibold">Lugar:</span>
+  </p>
+  <div>
+    <p class="text-xl max-sm:text-lg">
       {event.place || "Lugar no especificado"}
     </p>
     <p class="text-xl">{event.location || "Ubicación no especificada"}</p>

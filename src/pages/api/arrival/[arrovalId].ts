@@ -73,7 +73,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
     return jsonResponse(
       200,
       "Asistencia confirmada correctamente.",
-      asistenciaActualizada
+      asistenciaActualizada,
     );
   } catch (error) {
     console.error("Error al confirmar la asistencia:", error);
@@ -84,7 +84,7 @@ export const PATCH: APIRoute = async ({ params, request }) => {
 function jsonResponse(
   status: number,
   message: string,
-  data: any = null
+  data: any = null,
 ): Response {
   return new Response(JSON.stringify({ status, message, data }), {
     status,

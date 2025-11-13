@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import * as dotenv from "dotenv";
 
 // Learn more about instantiating PrismaClient in Next.js here: https://www.prisma.io/docs/data-platform/accelerate/getting-started
+dotenv.config();
 
 const prismaClientSingleton = () => {
   return new PrismaClient();

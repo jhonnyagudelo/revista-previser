@@ -1,33 +1,72 @@
 ---
+import { Image } from "astro:assets";
 import MainLayout from "@/layouts/mainLayout/MainLayout.astro";
-const imgLogo = "../assest/imgs/logo_conectado.png";
-const imgConect = "../assest/imgs/conectados.png";
+import imgFondoHeader from "@public/assets/imgs/Landig Invitación Late verde segmentada_Fondo 1.png";
+import imgLogo from "@public/assets/imgs/Landig Invitación Late verde segmentada_logo.png";
+import iconEducation from "@public/assets/imgs/Landig Invitación Late verde segmentada_imagen 3 f4.png";
+import tradeIcon from "@public/assets/imgs/Landig Invitación Late verde segmentada_imagen 2 f4.png";
+import medicinaIcon from "@public/assets/imgs/Landig Invitación Late verde segmentada_imagen 1 f4.png";
+import lineGreen from "@public/assets/imgs/lineaVerde.png";
+import hojaVerte from "@public/assets/imgs/Landig Invitación Late verde segmentada_hojas f2.png";
 ---
 
 <MainLayout title="Home">
-  <section class="flex flex-col items-center">
-    <h3 class="sm:text-3xl text-xl text-white">
-      Estas cordialmente invitado a
-    </h3>
-    <img class="m-3" src={imgLogo} width="250" height="250" alt="Logo" />
-  </section>
-  <section></section>
-  <section>
-    <img
-      class="items-center flex sm:w-fit p-3"
-      src={imgConect}
-      alt="Conectados"
+  <section class="relative flex justify-center items-center flex-col">
+    {/* Fondo: Ocupa todo el espacio, sigue siendo responsive */}
+    <Image
+      src={imgFondoHeader}
+      alt="Fondo de la cabecera"
+      class="w-full h-auto"
     />
-    <p class="sm:text-xl text-2xl text-white p-8 text-center">
-      Un espacio único,donde podras descubrir como somos el puente que conecta a
-      nuestros clientes con aliados como tu
-    </p>
-    <div class="border-b-2 border-white w-10/12 mx-auto"></div>
-    <div></div>
+
+    {/* Contenedor del Logo: ¡Aquí están los cambios! */}
+    <article
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[40%]
+           backdrop-blur-md rounded-lg p-4
+           max-w-[90%]
+           md:max-w-[600px]
+           w-auto flex justify-center items-center"
+    >
+      <Image
+        class="w-full h-auto max-w-full object-contain"
+        src={imgLogo}
+        alt="Logo"
+      />
+    </article>
   </section>
-  <section class="pb-8 mb-14">
-    <p class="text-white text-center text-xl">
-      ¡Esperamos verte y compartir este momento juntos!
-    </p>
+  <section class="pb-3 flex flex-col items-center relative"> 
+
+    <div class="absolute inset-x-0 bottom-0 top-96 max-sm:top-8 flex justify-center items-center"> 
+      <Image
+        class="w-full h-auto" 
+        src={lineGreen}
+        alt="Línea verde decorativa"
+      />
+    </div>
+
+    <article class="grid grid-cols-3 z-20 relative p-4 gap-4"> 
+      <Image class="p-2" src={medicinaIcon}  alt="Medicina Icon" />
+      <Image class="p-2" src={tradeIcon} alt="Trade Icon" />
+      <Image class="p-2" src={iconEducation} alt="Education Icon" />
+    </article>
+  </section>
+  <section class=" w-full h-[40em] max-sm:h-[25.2em] flex flex-col justify-center items-center gap-5 py-8 px-4 relative">
+    <article class="text-center">
+      <p class="text-4xl max-sm:text-xl text-primary-blue font-bold pb-3 ">
+        Porque juntos estamos cambiando la forma de conectar, servir y cuidar
+      </p>
+      <p class="text-4xl max-sm:text-xl text-primary-blue">
+        Gracias por ser parte de esta red que late por las familias colombianas</p>
+    </article>
+    <div class="absolute inset-0 flex items-center pointer-events-none">
+      <Image
+        class="object-contain z-30 opacity-90 w-[20em] max-sm:w-[14em] drop-shadow-lg"
+        src={hojaVerte}
+        alt="Línea verde decorativa"
+      />
+    </div>
+    <div class="bg-green rounded-b-lg w-[70%] text-center">
+      <p class="text-white font-bold px-12 py-2">Te esperamos</p>
+    </div>
   </section>
 </MainLayout>

@@ -2,8 +2,9 @@ interface GuestResponse {
   id: number;
   document: string;
   name: string;
+  phone?: string;
   surname?: string;
-  email?: string; // Si el correo es opcional
+  email?: string;
 }
 
 export interface Guest {

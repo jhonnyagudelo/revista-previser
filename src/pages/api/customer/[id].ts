@@ -6,6 +6,7 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ params, request }) => {
   const { id } = params;
+  console.log("ID recibido:", id);
   try {
     const customer = await prisma.customer.findUnique({
       where: { document: id },

@@ -3,48 +3,111 @@ import { ArrivalForm } from "../../../components/arrivalForm";
 import MainLayout from "../../../layouts/mainLayout/MainLayout.astro";
 import { fetchApi } from "../../../utilities";
 import type { Guest } from "../../../interfaces";
-const imgUrl = "../../../assest/imgs/conectados_.png";
+import { Image } from "astro:assets";
+
+import imgFondoHeader from "@public/assets/imgs/Landig Invitación Late verde segmentada_Fondo 1.png";
+import imgLogo from "@public/assets/imgs/Landig Invitación Late verde segmentada_logo.png";
+import lineGreen from "@public/assets/imgs/lineaVerde.png";
+import hojaVerte from "@public/assets/imgs/Landig Invitación Late verde segmentada_hojas f2.png";
 
 const { id } = Astro.params;
-const endpointCustomer = `/customer/${id}`; // Assuming this is a string
 
-// Consulta a la API para obtener los datos del invitado
-let guest;
+if (!id) {
+  return Astro.redirect("/404");
+}
+
+const endpointCustomer = `/customer/${id}`;
+
+// Fetch guest data with better error handling
+let guest: Guest | null = null;
+let errorMessage = "";
+
 try {
   guest = (await fetchApi(endpointCustomer)) as Guest;
+
+  if (!guest?.data) {
+    errorMessage = `No se encontraron datos para el invitado con ID: ${id}`;
+  }
 } catch (error) {
   console.error("Error al obtener datos del invitado:", error);
+  errorMessage = "Error al cargar los datos del invitado. Intente nuevamente.";
 }
 
-if (!guest) {
-  throw new Error(`No se encontraron datos para el invitado con ID: ${id}`);
-}
+
 ---
 
 <MainLayout title="Confirmar asistencia">
-  <section>
-    <img class="sm:h-5/6 sm:w-[28em]" src={imgUrl} alt="imagen" width="400" />
-    <div class="z-10 text-center p-10 center flex flex-col items-center">
-      <h1 class="sm:text-6xl p-3 text-white font-bold">Bienvenido:</h1>
-      <h2 class="sm:text-5xl p-3 text-white font-bold">
-        {guest?.data?.name?.toUpperCase()}
-        {guest?.data?.surname?.toUpperCase()}
-      </h2>
-      <ArrivalForm
-        server:defer
-        document={guest?.data?.document}
-        client:only="react"
+  <section class="relative flex items-center flex-col max-sm:h-dvh ">
+
+    <figure class="max-sm:w-full">
+      <Image
+        src={imgFondoHeader}
+        alt="Fondo de la cabecera"
+        class=""
       />
-    </div>
+      </figure>
+
+    <article class="absolute inset-0 flex flex-col top-1/3 max-sm:top-[6em] max-lg:top-[18em] max-xl:top-[22em] max-md:top-[13em] items-center">
+      <p class='text-green text-9xl max-xl:text-7xl max-lg:text-7xl  max-md:text-5xl max-sm:text-3xl font-bold px-4 text-center'>
+        Bienvenido:
+      </p>
+      
+      <Image
+        src={lineGreen}
+        alt="Línea verde decorativa"
+        class="w-full max-w-xs" 
+        />
+    </article>
+
+    {
+      errorMessage ? (
+        <section class="z-10 text-center p-10 bg-red-500/80 rounded-lg">
+          <p class="text-white text-xl">{errorMessage}</p>
+        </section>
+      ) : (
+        <section class="bg-green-mate gap-2 w-dvw text-center  p-6 ">
+          <article class=" h-[20em] flex flex-col justify-center ">
+            <p class="font-bold text-3xl text-primary-blue">{guest?.data?.name}</p>
+            <p class="font-bold text-3xl text-primary-blue" >{guest?.data?.phone}</p>
+            {guest?.data?.document && (
+              <ArrivalForm document={guest.data.document} client:only="react" />
+            )}
+          </article>
+        </section>
+      )
+    }
+    <section class="">
+      <article class="relative flex justify-center items-center h-[20em]">
+        <figure  >
+          <Image 
+            class ="absolute h-full"
+            src={hojaVerte} 
+            alt="hojaVerte"
+            width={500}
+            height={500}
+          />
+          <Image 
+            class ="relative z-10"
+            src={imgLogo} 
+            alt="Logo"
+            width={300}
+            height={300}
+          />
+        </figure>
+      </article>
+    </section>
   </section>
+
 </MainLayout>
+
+
+
 <style>
-  .center {
-    transform: translate(10px, -44em);
-  }
   @media (min-width: 768px) {
     .qr {
       transform: translate(10px, 10px);
     }
   }
 </style>
+
+

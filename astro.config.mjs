@@ -16,6 +16,7 @@ export default defineConfig({
     port: 4321, // Cambia al puerto que desees
     host: true, // Escucha en todas las interfaces de red
   },
+  
   build: {
     assets: "public", // Guarda los estáticos directamente en la carpeta `public`
   },
