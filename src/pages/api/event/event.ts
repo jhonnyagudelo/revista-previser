@@ -7,7 +7,7 @@ export const GET: APIRoute = async () => {
   try {
     const events = await prisma.event.findMany({
       orderBy: {
-        createdAt: "desc",
+        created_at: "desc",
       },
     });
 
