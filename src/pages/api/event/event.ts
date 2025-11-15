@@ -4,13 +4,33 @@ import type { APIRoute } from "astro";
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
-  const event = await prisma.event.findMany();
+  try {
+    const events = await prisma.event.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-  return new Response(JSON.stringify(event), {
-    status: 200,
+    return new Response(JSON.stringify(events), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching events:", error);
 
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+    return new Response(
+      JSON.stringify({
+        error: "Failed to fetch events",
+        message: error instanceof Error ? error.message : "Unknown error",
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+  }
 };
