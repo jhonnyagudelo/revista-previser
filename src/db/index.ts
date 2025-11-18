@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
 import * as dotenv from "dotenv";
 
 // Learn more about instantiating PrismaClient in Next.js here: https://www.prisma.io/docs/data-platform/accelerate/getting-started
